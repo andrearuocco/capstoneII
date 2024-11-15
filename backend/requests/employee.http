@@ -1,0 +1,35 @@
+###
+POST http://localhost:5000/profile/672a37e6cc7e11a01aa426ce/employee
+Content-Type: application/json
+
+{
+    "role": "addetta al reparto idraulico"
+}
+
+###
+GET http://localhost:5000/employee
+
+###
+GET http://localhost:5000/employee?role=addetta
+
+###
+GET http://localhost:5000/employee/6723d2506845512e5b455fd5
+
+###
+PUT http://localhost:5000/employee/67234846bb730785d387c2fc
+Content-Type: application/json
+
+{
+    "role": "parrucchiere"
+}
+
+###
+DELETE http://localhost:5000/employee/67234846bb730785d387c2fc
+
+###
+POST http://localhost:5000/employee/6723d2506845512e5b455fd5/rate
+Content-Type: application/json
+
+{
+    "rating": 2
+}

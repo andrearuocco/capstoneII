@@ -1,0 +1,141 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.br-40 {
+  border-radius: 40px !important;
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+  color: white;
+  background: linear-gradient(90deg, #004d99, #00cc99);
+  animation: colorChange 6s infinite alternate;
+  transition: background 1s ease;
+}
+
+.footer-text {
+  font-weight: bold;
+  font-family: 'Arial', sans-serif;
+}
+
+.input-border {
+  position: relative !important;
+  display: inline-block !important;
+  width: 100% !important;
+  border: 2px solid transparent !important;
+  border-radius: 6px !important;
+  transition: border-color 0.5s ease !important;
+}
+
+input:focus {
+  outline: none !important;
+}
+
+.button-nvm-po {
+  border: 0.2px solid #007bff;
+  border-radius: 20px !important;
+  background-color: #e1edf3;
+  color: rgb(5, 4, 4); 
+  font-style: oblique;
+  font-family: fangsong;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.button-nvm-po:hover {
+  border: 0.2px solid #7d8386 !important; 
+  background-color: #7d8386 !important; 
+  color: white; 
+}
+
+.button-nvm-true {
+  border: 0.2px solid #946c43;
+  border-radius: 20px !important;
+  background-color: #046c43;
+  color: rgb(5, 4, 4); 
+  font-style: oblique;
+  font-family: fangsong;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.button-nvm-true:hover {
+  border: 0.2px solid #78a745 !important; 
+  background-color: #78a745  !important; 
+  color: white; 
+}
+
+input:focus {
+  outline: none !important;
+}
+
+.input-border:focus-within {
+  border-color: #007bff !important;
+}
+
+.form-control:focus {
+  box-shadow: 0rem 0rem 0rem 0rem !important;
+}
+
+.form-control {
+  border-radius: 4px !important;
+}
+
+.form-select:focus {
+  box-shadow: 0rem 0rem 0rem 0rem !important;
+}
+
+.form-select {
+  border-radius: 4px !important;
+}
+
+.font-welcome {
+  font-family: "Ubuntu", sans-serif;
+}
+
+.font-button {
+  font-style: oblique;
+  font-family: fangsong;
+  font-weight: 600;
+}

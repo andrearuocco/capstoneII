@@ -1,0 +1,25 @@
+###
+POST http://localhost:5000/profile/672a37bacc7e11a01aa426c4/admin
+Content-Type: application/json
+
+{
+    "name": "Amministratore Delegato",
+    "description": "Web Developer"
+}
+
+###
+GET http://localhost:5000/admin
+
+###
+GET http://localhost:5000/admin/67234910bb730785d387c312
+
+###
+PUT http://localhost:5000/admin/67234910bb730785d387c312
+Content-Type: application/json
+
+{
+    "description": "web developer - backend dev"
+}
+
+###
+DELETE http://localhost:5000/admin/67234910bb730785d387c312

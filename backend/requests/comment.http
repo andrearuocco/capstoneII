@@ -1,0 +1,24 @@
+###
+POST http://localhost:5000/672348f7bb730785d387c30e/employees/672359410b296428d2e4c225/dailytasks/67239f671edb37fc45a010b0/comments
+Content-Type: application/json
+
+{
+    "content": "cancellare, alle 11 voglio finire con questi maledetti commenti"
+}
+
+###
+GET http://localhost:5000/employees/672359410b296428d2e4c225/dailytasks/67239f671edb37fc45a010b0/comments
+
+###
+GET http://localhost:5000/employees/672359410b296428d2e4c225/dailytasks/67239f671edb37fc45a010b0/comments/6723a0ac1edb37fc45a010b8
+
+###
+PUT http://localhost:5000/employees/672359410b296428d2e4c225/dailytasks/67239f671edb37fc45a010b0/comments/6723aaf0abb9d8a1692ae1db
+Content-Type: application/json
+
+{
+    "content": "riunione"
+}
+
+###
+DELETE http://localhost:5000/employees/672359410b296428d2e4c225/dailytasks/67239f671edb37fc45a010b0/comments/6723a0ac1edb37fc45a010b8

@@ -1,0 +1,62 @@
+###
+POST http://localhost:5000/api/v1/employees/67234b29bb730785d387c329/payments
+Content-Type: application/json
+
+{
+  "companyData": "672340d0bb730785d387c2e3",
+  "payPeriod": {
+      "month": 10,
+      "year": 2024,
+      "worked": {
+        "days": 22,
+        "hours": 176
+      }
+  },
+  "salary": {
+    "basicSalary": 2500,
+    "overtime": {
+      "hours": 10,
+      "hourlyRate": 20,
+      "total": 200
+    },
+    "bonus": 150,
+    "otherFees": 50,
+    "total": 2900
+  },
+  "deductions": {
+    "taxes": 500,
+    "socialContributions": 300,
+    "otherDeductions": 50,
+    "totalDeductions": 850
+  },
+  "payCheck": 2050,
+  "notes": "Pagamento per il mese di ottobre, incluse ore di straordinario."
+}
+
+
+###
+GET http://localhost:5000/api/v1/payments?companyId=6723406bbb730785d387c2dc
+
+###
+GET http://localhost:5000/api/v1/payments/67235c270b296428d2e4c229
+
+###
+GET http://localhost:5000/api/v1/employees/672359410b296428d2e4c225/payments
+
+###
+PUT http://localhost:5000/api/v1/payments/67235c270b296428d2e4c229
+Content-Type: application/json
+
+{
+  "payPeriod": {
+    "month": 3,
+    "year": 2023,
+    "worked": {
+      "days": 22,
+      "hours": 160
+    }
+  }
+}
+
+###
+DELETE http://localhost:5000/api/v1/payments/6723609a9d1c1e9c66594ca0
