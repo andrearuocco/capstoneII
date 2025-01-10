@@ -1,13 +1,12 @@
 import React from 'react';
 import './App.css';
-import Login from './components/Login'
-import ProfileContextProvider from './components/context/ProfileContextProvider';
+import ProfileContextProvider from './components/ProfileContextProvider';
 import { BrowserRouter } from 'react-router-dom';
 
 function App() {
 
   return (
-    <ProfileContextProvider><BrowserRouter><Login/></BrowserRouter></ProfileContextProvider>
+    <ProfileContextProvider><BrowserRouter></BrowserRouter></ProfileContextProvider>
   )
 }
 

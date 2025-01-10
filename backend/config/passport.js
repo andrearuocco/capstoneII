@@ -1,50 +1,51 @@
-/* 
-import GoogleStrategy from 'passport-google-oauth20'
+/* import GoogleStrategy from 'passport-google-oauth20';
+import Author from '../models/authorSchema.js' 
 import jwt from 'jsonwebtoken'
-import Profiles from '../models/profileSchema.js'
 
 const googleStrategy = new GoogleStrategy({
     clientID: process.env.GOOGLE_ID,
     clientSecret: process.env.GOOGLE_SECRET,
-    callbackURL: `${process.env.HOST}:${process.env.PORT}${process.env.GOOGLE_CALLBACK}`,
-    passReqToCallback: true
-}, 
-async function (req, accessToken, refreshToken, profile, passportNext) {
-    const { given_name: name, family_name: surname, email, sub: googleId, picture: avatar } = profile._json;
-    const { companyId } = req.query;
+    callbackURL: `${process.env.GOOGLE_CALLBACK}`,
+    },
 
-    let myProfile = await Profiles.findOne({ googleId });
+    async function (accessToken, refreshToken, profile, passportNext) {
+        console.log(profile)
 
-    if (!myProfile) {
-        const newProfile = new Profiles({
-            name,
-            surname,
-            email,
-            googleId,
-            avatar,
-            company: companyId,
-            IBAN: "000000000000000000000000000",
-            TIN: "0000000000000000",
-            country: "Italia"
-        })
-        myProfile = await newProfile.save()
-        req.session.companyId = null
-    }
+        const 
+            {given_name: name, family_name: surname ,email, sub:googleId, picture: avatar}
+         = profile._json;
 
-    if (!myProfile || !myProfile.company || myProfile.company.toString() !== companyId) {
-        return passportNext(null, false, { message: 'Non fai parte di questa azienda. Riprova' })
-    }
+        // nel DB cerchiamo l'esistenza dell'utente
+        let author = await Author.findOne({ googleId })
 
-    jwt.sign(
-        { profileId: myProfile._id },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' },
-        (error, jwtToken) => {
-            if (error) return passportNext(error);
-            return passportNext(null, { jwtToken });
+        // se non c'è lo creiamo
+        if (!author) {
+            const newAuthor = new Author({
+                googleId,
+                name,
+                surname,
+                email,
+                avatar,
+            })
+
+            author = await newAuthor.save()
         }
-    )
-})
 
-export default googleStrategy 
-*/
+        // creiamo il jwt per l'utente
+        jwt.sign(
+            { authorId: author.id },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: '1h',
+            },
+            (err, jwtToken) => {
+                if (err) return res.status(500).send()
+
+                // chiamiamo il prossimo middleware di passport in questo caso e non quello di express
+                return passportNext(null, { jwtToken }) // il primo argomento è l'eventuale errore mentre il secondo è un oggetto con la chiave jwtToken che il middleware chiamato assegnerà a req.author
+            }
+        )
+    }
+)
+
+export default googleStrategy */
