@@ -41,12 +41,13 @@ const userSchema = new mongoose.Schema({
     }],
     password: { type: String }, 
     /* employees */
-    annualLeave: { type: Number, default: 20 }, //ferie
-    paidLeave: { type: Number, default: 0 }, 
-    unpaidLeave: { type: Number, default: 0 }, 
+    annualLeave: { type: Number, default: 20, required: function () { return !this.isAdmin } }, //ferie
+    paidLeave: { type: Number, default: 0, required: function () { return !this.isAdmin } }, 
+    unpaidLeave: { type: Number, default: 0, required: function () { return !this.isAdmin } }, 
     leaveCertificates: [{ 
         fileUrl: String, //percorso del file caricato
         date: { type: Date, default: Date.now }, //data di caricamento
+        required: function () { return !this.isAdmin }
     }],
     /* employees */
     notifications: [{ 
