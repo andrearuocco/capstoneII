@@ -14,7 +14,7 @@ const companySchema = new Schema({
     email: {
         type: String, 
         required: [true, "Please enter an email"],
-        lowercase: true, // converte in minuscolo
+        lowercase: true, //converte in minuscolo
         trim: true,
         unique: true
     },
