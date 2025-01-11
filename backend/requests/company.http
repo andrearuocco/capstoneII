@@ -1,25 +1,34 @@
 ###
-POST http://localhost:5000/profile/672a37bacc7e11a01aa426c4/admin
+POST http://localhost:5000/companies
 Content-Type: application/json
 
 {
-    "name": "Amministratore Delegato",
-    "description": "Web Developer"
+    "companyName": "SEP S.R.L.",
+    "vatNumber": "01052190491",
+    "address": {
+        "street": "Viale Carducci 180",
+        "city": "Livorno",
+        "postalCode": "57124",
+        "province": "Livorno",
+        "country": "Italy"
+    },
+    "email": "sepedilizia@virgilio.it",
+    "IBAN": "IT35Y0300203280455343217862"
 }
 
 ###
-GET http://localhost:5000/admin
+GET http://localhost:5000/companies
 
 ###
-GET http://localhost:5000/admin/67234910bb730785d387c312
+GET http://localhost:5000/companies/6782c4cb9b8090e8d2b5ebba
 
 ###
-PUT http://localhost:5000/admin/67234910bb730785d387c312
+PUT http://localhost:5000/companies/6782c4cb9b8090e8d2b5ebba
 Content-Type: application/json
 
 {
-    "description": "web developer - backend dev"
+    "IBAN": "IT55V0300203280539916298675"
 }
 
 ###
-DELETE http://localhost:5000/admin/67234910bb730785d387c312
+DELETE http://localhost:5000/companies/6782c4cb9b8090e8d2b5ebba

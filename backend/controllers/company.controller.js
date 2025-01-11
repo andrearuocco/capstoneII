@@ -1,150 +1,79 @@
-import Profile from '../models/profileSchema.js'
-import bcrypt from "bcrypt"
-import transport from '../services/serviceMail.js'
-import Company from '../models/companySchema.js'
+import Company from '../models/companySchema.js' 
 
-export const registerProfile = async (req, res) => {
-    const { companyId } = req.params;
-    let newProfile
+export const registerCompany = async (req, res) => {
+    // crea nuova istanza del modello company con i dati definiti nel corpo della richiesta 
+  
+    const company = new Company({
+        ...req.body
+    })
+    let newCompany
     try {
-        const company = await Company.findById(companyId);
-        if (!company) {
-            return res.status(404).json({ message: 'Company non trovata' });
-        }
-
-        // verificare che la mail sia già utilizzata
-        const profile = await Profile.findOne({ email: req.body.email })
-        if (profile) {
-            return res.status(500).send('Mail già nel database.')
-        }
-
-        // se non è utilizzata allora registrare il nuovo utente con la password hashata
-        newProfile = new Profile({
-            name: req.body.name,
-            surname: req.body.surname,
-            email: req.body.email,
-            password: await bcrypt.hash(req.body.password, 10),
-            birthday: req.body.birthday,
-            avatar: req.file ? req.file.path : 'https://thumbs.dreamstime.com/z/disegno-vettoriale-immagine-profilo-avatar-vuoto-262683009.jpg?ct=jpeg',
-            country: req.body.country,
-            IBAN: req.body.IBAN,
-            TIN: req.body.TIN,
-            company: companyId,
-            verifictedAct: new Date()
-        })
-
-        const createdProfile = await newProfile.save()
-        res.send(createdProfile)
+        newCompany = await company.save() // salva i dati nel DB
+        // mando in risposta la nuova azienda salvata 
+        return res.send(newCompany) // mando in risposta la nuova azienda salvata
     } catch (error) {
-        console.log(error)
-        res.status(400).send(error)
-    }
-
-    try {
-        const profile = await Profile.findById(newProfile._id)
-        await transport.sendMail({
-            from: 'noreply@epicoders.com', // sender address
-            to: profile.email, // list of receivers
-            subject: "Nuova Utenza Creata", // Subject line
-            text: "Adesso sei dei nostri, benvenuto!!", // plain text body
-            html: "<b>Adesso sei dei nostri, benvenuto!!</b>" // html body
-        })
-    } catch (error) {
-        console.log(error)
+        return res.status(400).send(error)
     }
 }
 
-export const getAllProfile = async (req,res) => {
+export const getAllCompanies = async (req,res) => {
     try {
-/*      
-        const page = req.query.page || 1;
-        let perPage = req.query.perPage || 3;
-        perPage = perPage > 9 ? 3 : perPage  // se l'utente richiede più di 20 profiles su una pagina saranno mostrati 3 profiles come di default 
-*/
+        const page = req.query.page || 1; // definisce la pagina, se non specificata nella richiesta utente si va a pagina 1
+        let perPage = req.query.perPage || 8; // definisce quanti elementi devono stare nella pagina 
+        perPage = perPage > 20 ? 8 : perPage // se l'utente richiede più di 24 companies su una pagina saranno mostrati 8 companies come di default
 
-        const profile = await Profile.find()
-/*          
-            .collation({locale: 'it'}) //serve per ignorare maiuscole e minuscole nell'ordine alfabetico del sort
-            .sort({name:1, surname:1})  // ordino gli oggetti JSON in ordine alfabetico secondo il nome e la cognome
+        const company = await Company.find(req.query.title ? {title: {$regex: req.query.title, $options: 'i'}} : {}) // cerca tra le companies secondo il titolo 
+            .collation({locale: 'it'}) // ignora le maiuscole nell'ordinamento secondo il sort 
+            .sort({ companyName: 1 }) // ordino gli oggetti JSON in ordine crescente secondo il nome 
             .skip((page - 1) * perPage) // salto documenti pagina precedente 
-            .limit(perPage); // indico gli elementi da mostrare per pagina
+            .limit(perPage) // indico gli elementi da mostrare per pagina
+            /*  .populate('user')
+            .populate('job')
+            .populate('material')
+            .populate('transaction') */;
 
-        const totalResults = await Profile.countDocuments(); // conta tutti i documenti profile nella collection 
-        const totalPages = Math.ceil(totalResults / perPage); 
-*/
+        const totalResults = await Company.countDocuments();
+        const totalPages = Math.ceil(totalResults / perPage);
 
-        res.send(
-/*      {
-            dati: 
-*/          profile
-/*          totalPages,
+        res.send({
+            dati: company,
+            totalPages,
             totalResults,
             page,
-        } */
-        )
+        })
     } catch(err) {
-        res.status(404).send()
+        res.status(404).send({ error: "Errore, aziende non trovate.", details: err.message })
     }
 }
 
-export const getSingleProfile = async (req,res)=>{
-    const {id} =req.params
-    try {
-        const profile = await Profile.findById(id)
-        res.send(profile) 
-    } catch (error) {
-        res.status(404).send({message: 'Not Found'})
+export const getCompanyById = async (req,res) => {
+    // cerco una specifica istanza del modello companies recuperando l'id dalla richiesta 
+    const {id} = req.params
+    try { 
+        const company = await Company.findById(id)/* .populate('user').populate('job').populate('material').populate('transaction') */;
+        res.send(company)
+    } catch(error) {
+        res.status(404).send({message: 'Errore, azienda non trovata.'})
     }
 }
 
-export const editProfile = async (req, res) => {
-    const { id } = req.params;
-    const { password } = req.body;
-
-    try {
-        // trova il profilo da aggiornare
-        const profile = await Profile.findById(id);
-
-        if (!profile) {
-            return res.status(404).send({ message: 'Profilo non trovato.' })
-        }
-
-        // gestisci l'aggiornamento della password 
-        if (password) {
-            req.body.password = await bcrypt.hash(password, 10);
-        } else {
-            delete req.body.password;  // non aggiornare la password se non è stata fornita una nuova
-        }
-
-        // esegui l'aggiornamento del profilo
-        const updatedProfile = await Profile.findByIdAndUpdate(id, req.body, { new: true })
-
-        res.send(updatedProfile)
-    } catch (err) {
-        console.error('Errore durante aggiornamento profilo:', err)
-        res.status(400).send({ error: 'Errore durante aggiornamento profilo' })
-    }
-}
-
-export const deleteProfile = async (req, res) => {
+export const updateCompany = async (req, res) => {
     const { id } = req.params
     try {
-        const profile = await Profile.findByIdAndDelete(id)
-        
-        res.send(`Successfully deleted profile with id ${id}.`)
+        const company = await Company.findByIdAndUpdate(id, req.body, { new: true }) // trova l'azienda specificata nella richiesta e la modifica, new: true consente di rispondere con l'oggetto successivo al salvataggio
+        await company.save() // salvo l'istanza modificata nel DB
+        res.send(company)
     } catch (error) {
-        res.status(404).send({ message: `Profile ${id} not found` })
+        res.status(400).send({ message: `Azienda ${id} non modificata.` })
     }
 }
 
-export const patchProfile = async (req, res) => {
-    // la patch serve per modificare una risorsa nel DB che esiste già
-    const { id } = req.params // recupero l'id dalla richiesta
+export const deleteCompany = async (req, res) => {
+    const { id } = req.params
     try {
-        const profile = await Profile.findByIdAndUpdate(id, { avatar: req.file.path }, { new: true }) // trovo profile attraverso il proprio id esplicitato nella richiesta e lo modifica secondo il corpo di quest'ultima
-
-        res.status(200).send(profile)
+        const company = await Company.findByIdAndDelete(id)
+        res.send(`Azienda ${id} cancellata dal nostro gestionale.`)
     } catch(error) {
-        res.status(400).send(error)
+        res.status(404).send({message: `Azienda ${id} non trovata.`})
     }
 }
