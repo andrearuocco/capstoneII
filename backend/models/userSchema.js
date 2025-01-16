@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: {
@@ -9,6 +9,15 @@ const userSchema = new mongoose.Schema({
         lowercase: true, //converte in minuscolo
         trim: true,
         unique: true
+    },
+    birthday: {
+        type: Date,
+    },
+    country: {
+        type: String,
+    },
+    avatar: {
+        type: String,
     },
     phone: { type: String, required: true },
     isAdmin: { type: Boolean, required: true }, //indica se l'utente è un amministratore in modo da poter gestire il ruolo di questi in modo stringente grazie ad enum
@@ -28,7 +37,6 @@ const userSchema = new mongoose.Schema({
     company: { type: Schema.Types.ObjectId, 
         ref: 'Company', required: true }, 
     googleId: { type: String }, 
-    licenseKey: { type: String }, //utilizzare per protezione dell'applicazione e da inviare all'indirizzo dell'azienda selezionata o appena registata
     compensations: { 
         type: Number,
         required: function () {
@@ -44,12 +52,17 @@ const userSchema = new mongoose.Schema({
     annualLeave: { type: Number, default: 20, required: function () { return !this.isAdmin } }, //ferie
     paidLeave: { type: Number, default: 0, required: function () { return !this.isAdmin } }, 
     unpaidLeave: { type: Number, default: 0, required: function () { return !this.isAdmin } }, 
-    leaveCertificates: [{ 
-        fileUrl: String, //percorso del file caricato
-        date: { type: Date, default: Date.now }, //data di caricamento
-        required: function () { return !this.isAdmin }
-    }],
+    leaveCertificates: {
+        type: [{
+            fileUrl: { type: String }, //percorso del file caricato
+            date: { type: Date, default: Date.now }, //data di caricamento
+        }],
+        required: function () { return !this.isAdmin } //applico la logica di controllo admin/employee all'array di certificati 
+    },
     /* employees */
+    TIN: {
+        type: String,
+    },
     notifications: [{ 
         message: String, //notifiche necessarie per la gestione dei permessi pagati, non pagati e delle ferie
         read: { type: Boolean, default: false }, //indica se la notifica è stata letta oppure no

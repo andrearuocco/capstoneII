@@ -1,0 +1,14 @@
+###
+POST http://localhost:5000/user
+Content-Type: application/json
+
+{
+  "firstName": "Mario",
+  "lastName": "Rossi",
+  "email": "mario.rossi@example.com",
+  "phone": "123456789",
+  "isAdmin": false,
+  "position": "Elettricista",
+  "companyId": "67897dfbc172401d642ccf69",
+  "password": "password123"
+}
