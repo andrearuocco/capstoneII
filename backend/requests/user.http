@@ -12,3 +12,29 @@ Content-Type: application/json
   "companyId": "67897dfbc172401d642ccf69",
   "password": "password123"
 }
+
+###
+POST http://localhost:5000/user
+Content-Type: application/json
+
+{
+  "firstName": "Orazio",
+  "lastName": "Rossi",
+  "email": "orazio.rossi@example.com",
+  "phone": "123456789",
+  "isAdmin": true,
+  "adminRole": "Direttore",
+  "companyId": "67897dfbc172401d642ccf69",
+  "password": "password123"
+}
+
+###
+PUT http://localhost:5000/user/6789811fc172401d642ccf6c
+Content-Type: application/json
+
+{
+ "position": "Idraulico"
+}
+
+###
+DELETE http://localhost:5000/user/678a6d99cb940866d003cca8

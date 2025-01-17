@@ -35,13 +35,12 @@ const userSchema = new Schema({
         },
     },
     company: { type: Schema.Types.ObjectId, 
-        ref: 'Company', required: true }, 
-    googleId: { type: String }, 
+        ref: 'Company', required: true },  
     compensations: { 
-        type: Number,
+        type: Number/* ,
         required: function () {
             return this.isAdmin //quando è un'amministratore allora avrà una voce compenso
-        },
+        }, */
     },
     payrolls: [{ 
         type: Schema.Types.ObjectId,

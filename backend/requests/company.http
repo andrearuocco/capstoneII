@@ -20,7 +20,7 @@ Content-Type: application/json
 GET http://localhost:5000/companies
 
 ###
-GET http://localhost:5000/companies/6782c4cb9b8090e8d2b5ebba
+GET http://localhost:5000/companies/67897dfbc172401d642ccf69
 
 ###
 PUT http://localhost:5000/companies/6782c4cb9b8090e8d2b5ebba

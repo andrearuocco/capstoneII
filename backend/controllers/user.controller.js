@@ -46,7 +46,7 @@ export const createUser = async (req, res) => {
     }
 }
 
-export const getUsers = async (req, res) => {
+/* export const getUsers = async (req, res) => {
     const { companyId } = req.user
 
     try {
@@ -56,8 +56,7 @@ export const getUsers = async (req, res) => {
         console.error(error)
         res.status(500).send({ message: 'Here, there are not users.', error })
     }
-}
-
+} */
 
 export const updateUser = async (req, res) => {
     const { id } = req.params
@@ -88,9 +87,9 @@ export const updateUser = async (req, res) => {
             }
         }
 
-        if (!req.user.isAdmin && Object.keys(adminUpdates).length > 0) {
+        /* if (!req.user.isAdmin && Object.keys(adminUpdates).length > 0) {
             return res.status(403).send({ message: 'Only admins can edit this field.' })
-        }
+        } */
 
         const updatedUser = await User.findByIdAndUpdate(
             id,
@@ -106,21 +105,34 @@ export const updateUser = async (req, res) => {
 }
 
 export const deleteUser = async (req, res) => {
-    if (!req.user.isAdmin) {
-        return res.status(403).send({ message: 'Only admins can delete a user.' });
-    }
-
     const { id } = req.params
 
     try {
-        const deletedUser = await User.findByIdAndDelete(id)
-        if (!deletedUser) {
+        
+        const user = await User.findById(id)
+        if (!user) {
             return res.status(404).send({ message: 'Not Found' })
         }
 
-        res.status(200).send({ message: 'User deleted.', user: deletedUser })
+        const company = await Company.findById(user.company) //trova l'azienda a cui appartiene l'utente da eliminare 
+        if (!company) {
+            return res.status(404).send({ message: 'Not Found' })
+        }
+
+        //rimuovi l'utente corrispondente secondo la propria posizione aziendale
+        if (user.isAdmin) {
+            company.admins = company.admins.filter(adminId => adminId.toString() !== id)
+        } else {
+            company.employees = company.employees.filter(employeeId => employeeId.toString() !== id)
+        }
+
+        await company.save() //salva le modifiche apportate nel modello company corrispondente
+
+        await user.deleteOne() //elimina istanza user dalla collection
+
+        res.status(200).send({ message: 'User deleted.', user })
     } catch (error) {
-        console.error(error)
+        console.error(error);
         res.status(500).send({ message: 'Error, wait and try again.', error })
     }
 }
