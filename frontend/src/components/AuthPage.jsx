@@ -1,107 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
-import { fetchGetCompanies, createCompany } from '../data/fetchCompany'; // Import funzioni
-import { registerProfile } from '../data/fetchProfile'; // Import funzioni
+import React, { useState, useEffect } from 'react'
+import { Modal, Button, Form } from 'react-bootstrap'
+import { fetchGetCompanies, createCompany } from '../data/fetchCompany'
+import { registerProfile } from '../data/fetchProfile'
 
 function AuthPage() {
-  const [companies, setCompanies] = useState([]);
-  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showCompanyRegistration, setShowCompanyRegistration] = useState(false);
+  const [companies, setCompanies] = useState([])
+  const [selectedCompanyId, setSelectedCompanyId] = useState(null)
+  const [showLogin, setShowLogin] = useState(false) //mostra il form per l'accesso degli utenti registrati
+  const [showCompanyRegistration, setShowCompanyRegistration] = useState(false)
   const [formState, setFormState] = useState({
     companyName: '',
     vatNumber: '',
-    adminEmail: '',
-    adminPassword: '',
-  });
+    email: '',
+    IBAN: '',
+    address: {
+      street: '',
+      city: '',
+      postalCode: '',
+      province: '',
+      country: '',
+    },
+  }) 
 
-  // Fetch delle aziende dal backend
+  //carica la fetch di tutte le aziende 
+  const loadCompanies = async () => {
+    const data = await fetchGetCompanies()
+    if (data) {
+      setCompanies(data.dati || [])
+    }
+  }
   useEffect(() => {
-    const loadCompanies = async () => {
-      const data = await fetchGetCompanies();
-      if (data) {
-        setCompanies(data.dati || []);
-      }
-    };
-    loadCompanies();
-  }, []);
+    loadCompanies()
+  }, [])
+
+  const handleCompanyFormChange = (e) => {
+    const { id, value } = e.target
+
+    if (id.startsWith('address.')) {
+      const addressField = id.split('.')[1]
+      setFormState((prev) => ({
+        ...prev,
+        address: {
+          ...prev.address,
+          [addressField]: value,
+        },
+      }))
+    } else {
+      setFormState({ ...formState, [id]: value })
+    }
+  } //cattura l'evento target quando l'utente visitatore seleziona le opzioni nella select dell'azienda
 
   const handleCompanySelection = () => {
     if (selectedCompanyId) {
-      setShowLogin(true);
+      setShowLogin(true)
     } else {
-      alert('Seleziona azienda prima di procedere.');
+      alert('Select your company to login.')
     }
-  };
+  } //mostra il form di login per accedere come utente dell'azienda selezionata 
 
   const handleNewCompanyRegistration = () => {
-    setShowCompanyRegistration(true);
-  };
-
-  const handleUserRegistration = () => {
-    setShowRegisterModal(true);
-  };
-
-  const handleModalClose = () => {
-    setShowRegisterModal(false);
-  };
-
-  const handleCompanyFormChange = (e) => {
-    setFormState({ ...formState, [e.target.id]: e.target.value });
-  };
+    setShowCompanyRegistration(true) //mostra form di registrazione per nuova azienda 
+  }
 
   const handleCompanySubmit = async (e) => {
-    e.preventDefault();
-    const newCompany = {
-      companyName: formState.companyName,
-      vatNumber: formState.vatNumber,
-      adminEmail: formState.adminEmail,
-      adminPassword: formState.adminPassword,
-    };
-
-    const result = await createCompany(newCompany);
+    e.preventDefault()
+    const result = await createCompany(formState)
     if (result?.error) {
-      alert(result.error);
+      alert(result.error)
     } else {
-      alert('Azienda registrata con successo!');
+      alert('There is a new company. Welcome to gestionaleaziendale');
       setShowCompanyRegistration(false);
-      setCompanies((prev) => [...prev, newCompany]);
+      setCompanies((prev) => [...prev, formState])
     }
-  };
-
-  const handleRegisterSubmit = async (e) => {
-    e.preventDefault();
-    const formData = {
-      firstName: e.target.registerFirstName.value,
-      lastName: e.target.registerLastName.value,
-      email: e.target.registerEmail.value,
-      password: e.target.registerPassword.value,
-      companyId: selectedCompanyId,
-    };
-
-    const result = await registerProfile(formData);
-    if (result?.error) {
-      alert(result.error);
-    } else {
-      alert('Utente registrato con successo!');
-      setShowRegisterModal(false);
-    }
-  };
+  }
 
   return (
     <div className="container mt-5">
       {!showCompanyRegistration ? (
         <div className="text-center">
-          <h1>Benvenuto!</h1>
+          <h1>Welcome!!</h1>
           <div className="mt-4">
             <Form.Group controlId="companySelection" className="mb-3">
-              <Form.Label>Seleziona un'Azienda</Form.Label>
+              <Form.Label>Select your Company</Form.Label>
               <Form.Select
                 onChange={(e) => setSelectedCompanyId(e.target.value)}
                 value={selectedCompanyId || ''}
               >
-                <option value="">-- Seleziona un'Azienda --</option>
+                <option value="">-- Select your Company --</option>
                 {companies.map((company) => (
                   <option key={company._id} value={company._id}>
                     {company.companyName}
@@ -110,84 +95,45 @@ function AuthPage() {
               </Form.Select>
             </Form.Group>
             <Button className="me-3" onClick={handleCompanySelection}>
-              Accedi Azienda
+              Here to Login
             </Button>
             <Button variant="secondary" onClick={handleNewCompanyRegistration}>
-              Registra Nuova Azienda
+              Register a new Company
             </Button>
           </div>
 
           {showLogin && (
             <div className="mt-4">
-              <h3>Accedi all'Azienda</h3>
+              <h3>Login in your Company and use gestionaleaziendale</h3>
               <Form>
                 <Form.Group controlId="formBasicEmail" className="mb-3">
                   <Form.Label>Email</Form.Label>
-                  <Form.Control type="email" placeholder="Inserisci email" />
+                  <Form.Control type="email" placeholder="Insert email" />
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword" className="mb-3">
                   <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" placeholder="Inserisci password" />
+                  <Form.Control type="password" placeholder="Type password" />
                 </Form.Group>
 
                 <Button variant="primary" type="submit">
-                  Accedi
+                  Login
                 </Button>
 
-                <Button
-                  variant="link"
-                  onClick={handleUserRegistration}
-                  className="ms-3"
-                >
-                  Nuovo Utente? Registrati
-                </Button>
               </Form>
             </div>
           )}
 
-          <Modal show={showRegisterModal} onHide={handleModalClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Registrazione Nuovo Utente</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form onSubmit={handleRegisterSubmit}>
-                <Form.Group controlId="registerFirstName" className="mb-3">
-                  <Form.Label>Nome</Form.Label>
-                  <Form.Control type="text" placeholder="Inserisci il tuo nome" />
-                </Form.Group>
-
-                <Form.Group controlId="registerLastName" className="mb-3">
-                  <Form.Label>Cognome</Form.Label>
-                  <Form.Control type="text" placeholder="Inserisci il tuo cognome" />
-                </Form.Group>
-
-                <Form.Group controlId="registerEmail" className="mb-3">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control type="email" placeholder="Inserisci la tua email" />
-                </Form.Group>
-
-                <Form.Group controlId="registerPassword" className="mb-3">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" placeholder="Inserisci la tua password" />
-                </Form.Group>
-
-                <Button variant="primary" type="submit">
-                  Registrati
-                </Button>
-              </Form>
-            </Modal.Body>
-          </Modal>
         </div>
       ) : (
         <div>
-          <h2>Registrazione Nuova Azienda</h2>
+          <h2>Register a new company</h2>
           <Form onSubmit={handleCompanySubmit}>
             <Form.Group controlId="companyName" className="mb-3">
-              <Form.Label>Nome Azienda</Form.Label>
+              <Form.Label>Company Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Inserisci il nome dell'azienda"
+                placeholder="gestionaleaziendale"
                 onChange={handleCompanyFormChange}
               />
             </Form.Group>
@@ -196,31 +142,68 @@ function AuthPage() {
               <Form.Label>Partita IVA</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Inserisci la Partita IVA"
+                placeholder="gestionaleaziendale"
                 onChange={handleCompanyFormChange}
               />
             </Form.Group>
 
             <Form.Group controlId="adminEmail" className="mb-3">
-              <Form.Label>Email Amministratore</Form.Label>
+              <Form.Label>Company's email</Form.Label>
               <Form.Control
                 type="email"
-                placeholder="Inserisci l'email dell'amministratore"
+                placeholder="gestionaleaziendale"
                 onChange={handleCompanyFormChange}
               />
             </Form.Group>
 
-            <Form.Group controlId="adminPassword" className="mb-3">
-              <Form.Label>Password</Form.Label>
+            <h4>Company Address</h4>
+            <Form.Group controlId="address.street" className="mb-3">
+              <Form.Label>Address/Street</Form.Label>
               <Form.Control
-                type="password"
-                placeholder="Inserisci la password"
+                type="text"
+                placeholder="gestionaleaziendale"
+                onChange={handleCompanyFormChange}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="address.city" className="mb-3">
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="gestionaleaziendale"
+                onChange={handleCompanyFormChange}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="address.postalCode" className="mb-3">
+              <Form.Label>CAP</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="gestionaleaziendale"
+                onChange={handleCompanyFormChange}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="address.province" className="mb-3">
+              <Form.Label>Where - Provincia</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="gestionaleaziendale"
+                onChange={handleCompanyFormChange}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="address.country" className="mb-3">
+              <Form.Label>From</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="gestionaleaziendale"
                 onChange={handleCompanyFormChange}
               />
             </Form.Group>
 
             <Button variant="success" type="submit">
-              Registra Azienda
+              Register Company
             </Button>
           </Form>
         </div>
