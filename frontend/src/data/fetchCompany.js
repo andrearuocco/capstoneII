@@ -6,7 +6,7 @@ export const fetchGetCompanies = async () => {
         const data = await res.json()
         return data
     } catch (err) {
-        console.log("Aziende non recuperate.", err)
+        console.log("There are not companies, here.", err)
     }
 }
 
@@ -21,6 +21,23 @@ export const createCompany = async (newCompany) => {
         })
 
     } catch (error) {
-        return { error: 'Riporva più tardi.' }
+        return { error: 'Server down, try again.' }
+    }
+}
+
+export const companyId = async (id) => {
+    try {
+        const res = await fetch(`${fetchCompanyUrl}/:id`, {
+            method: 'GET',
+        })
+        if (res.ok) {
+            const data = await res.json()
+            return data
+        } else {
+            const errorData = await res.json()
+            return { error: errorData.message || 'Not Found' }
+        }
+    } catch (error) {
+        return { error: 'Riprova più tardi' }
     }
 }

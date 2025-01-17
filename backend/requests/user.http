@@ -9,7 +9,7 @@ Content-Type: application/json
   "phone": "123456789",
   "isAdmin": false,
   "position": "Elettricista",
-  "companyId": "67897dfbc172401d642ccf69",
+  "companyId": "678a94301b84e9ebffc7cf30",
   "password": "password123"
 }
 
@@ -24,12 +24,12 @@ Content-Type: application/json
   "phone": "123456789",
   "isAdmin": true,
   "adminRole": "Direttore",
-  "companyId": "67897dfbc172401d642ccf69",
+  "companyId": "678a94301b84e9ebffc7cf30",
   "password": "password123"
 }
 
 ###
-PUT http://localhost:5000/user/6789811fc172401d642ccf6c
+PUT http://localhost:5000/user/678a95091b84e9ebffc7cf36
 Content-Type: application/json
 
 {

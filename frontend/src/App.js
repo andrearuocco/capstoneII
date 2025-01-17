@@ -1,12 +1,22 @@
 import React from 'react';
 import './App.css';
-import ProfileContextProvider from './components/ProfileContextProvider';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import AuthPage from './components/AuthPage';
 
 function App() {
 
   return (
-    <ProfileContextProvider><BrowserRouter></BrowserRouter></ProfileContextProvider>
+    <Router>
+
+      <Routes>
+        <Route path="/" element={<AuthPage />} />
+        {/* <Route element={<ProtectedRoutes />}>
+          <Route path="/:id" element={<div className="fade-in-appjs"><EmployeeEdit /></div>} />
+          <Route path="/:id/payments/:employeeDataId" element={<div className="fade-in-appjs"><PayEnvelope /></div>} />
+        </Route> */}
+      </Routes>
+
+    </Router>
   )
 }
 
