@@ -20,3 +20,16 @@ export const login = async (formValue) => {
         return { error: 'Server error' }
     }
 }
+
+export const me = async () => {
+    const res = await fetch(`${fetchAuthUrl}/auth/me`, {
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+    if (!res.ok) {
+        throw new Error(res.status)
+    }
+    const data = await res.json();
+    return data
+}

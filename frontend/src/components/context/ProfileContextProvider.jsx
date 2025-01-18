@@ -1,5 +1,5 @@
-/* import { useState, createContext, useEffect } from "react"
-import { me } from "../../data/fetch"
+import { useState, createContext, useEffect } from "react"
+import { me } from "../../data/fetchAuth"
 
 export const ProfileContext = createContext()
 
@@ -25,4 +25,4 @@ export default function ProfileContextProvider({children}) {
     return (
         <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>
     )
-} */
+} 

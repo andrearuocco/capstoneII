@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap'
-import { fetchGetCompanies, createCompany } from '../data/fetchCompany'
-import { registerProfile } from '../data/fetchProfile'
-import { login } from '../data/fetchAuth'
+import { fetchGetCompanies, createCompany } from '../../data/fetchCompany'
+import { registerProfile } from '../../data/fetchProfile'
+import { login } from '../../data/fetchAuth'
 import { Alert } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import { ProfileContext } from '../context/ProfileContextProvider'
 
 function AuthPage() {
     const [companies, setCompanies] = useState([])
@@ -13,6 +15,8 @@ function AuthPage() {
     const [showAdminModal, setShowAdminModal] = useState(false)
     const [alertMessage, setAlertMessage] = useState(null)
     const [alertVariant, setAlertVariant] = useState('success')
+    const { token, setToken, userInfo, setUserInfo } = useContext(ProfileContext)
+    const navigate = useNavigate()
     const [formState, setFormState] = useState({
         companyName: '',
         vatNumber: '',
@@ -120,11 +124,14 @@ function AuthPage() {
             company: selectedCompanyId
         })
         // gestione accesso utente
-        if (data.token) {
+        if (data && data.token) { // controlliamo se il token esiste
+            localStorage.setItem('token', data.token) // salviamo il token nel localStorage
+            setToken(data.token) // aggiorniamo il token nello stato del contesto
+
             setAlertMessage('Login successful!')
             setAlertVariant('success')
-    
-            // navigate()
+
+            navigate('/dashboard')
         } else {
             setAlertMessage(data.message || 'Login failed')
             setAlertVariant('danger')
