@@ -1,0 +1,13 @@
+###
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+    "email": "mario.rossi@example.com",
+    "password": "password123",
+    "company": "678bc4eb6279e6af82fced28"
+}
+
+###
+GET http://localhost:5000/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9maWxlSWQiOiI2NzhiYzUyNTYyNzllNmFmODJmY2VkMmYiLCJpYXQiOjE3MzcyMTcyNjMsImV4cCI6MTczNzIyMDg2M30.4Fa89SUcFWKorTp3vlfr790mdhxoVGhUQwWVL0cvsA0

@@ -5,6 +5,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import helmet from 'helmet'
 import companyRoutes from './routes/companyRoutes.js'
+import authRoutes from './routes/authRoutes.js'
 import userRoutes from './routes/userRoutes.js' 
 
 const port = process.env.PORT || 5000
@@ -19,6 +20,7 @@ server.use(morgan("dev")) // middleware che mostra i log delle richieste http
 server.use(helmet()) // modulo che aiuta a proteggere le applicazioni
 
 server.use('/companies', companyRoutes) 
+server.use('/auth', authRoutes)
 server.use('/user', userRoutes) 
 
 await mongoose.connect(process.env.MONGODB_URL)

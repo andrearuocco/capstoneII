@@ -9,7 +9,7 @@ Content-Type: application/json
   "phone": "123456789",
   "isAdmin": false,
   "position": "Elettricista",
-  "companyId": "678a94301b84e9ebffc7cf30",
+  "companyId": "678bc4eb6279e6af82fced28",
   "password": "password123"
 }
 
@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:5000/user/678a95091b84e9ebffc7cf36
+PUT http://localhost:5000/user/678bc5256279e6af82fced2f
 Content-Type: application/json
 
 {

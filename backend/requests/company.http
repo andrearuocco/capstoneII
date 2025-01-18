@@ -20,10 +20,10 @@ Content-Type: application/json
 GET http://localhost:5000/companies
 
 ###
-GET http://localhost:5000/companies/678a94301b84e9ebffc7cf30
+GET http://localhost:5000/companies/678bc4eb6279e6af82fced28
 
 ###
-PUT http://localhost:5000/companies/678a94301b84e9ebffc7cf30
+PUT http://localhost:5000/companies/678bc4eb6279e6af82fced28
 Content-Type: application/json
 
 {

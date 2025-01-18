@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap'
 import { fetchGetCompanies, createCompany } from '../data/fetchCompany'
 import { registerProfile } from '../data/fetchProfile'
+import { login } from '../data/fetchAuth'
+import { Alert } from 'react-bootstrap'
 
 function AuthPage() {
     const [companies, setCompanies] = useState([])
@@ -9,6 +11,8 @@ function AuthPage() {
     const [showLogin, setShowLogin] = useState(false) //mostra il form per l'accesso degli utenti registrati
     const [showCompanyRegistration, setShowCompanyRegistration] = useState(false)
     const [showAdminModal, setShowAdminModal] = useState(false)
+    const [alertMessage, setAlertMessage] = useState(null)
+    const [alertVariant, setAlertVariant] = useState('success')
     const [formState, setFormState] = useState({
         companyName: '',
         vatNumber: '',
@@ -102,6 +106,31 @@ function AuthPage() {
         setAdminFormState({ ...adminFormState, [id]: value })
     }
 
+    const handleLoginSubmit = async (e) => {
+        e.preventDefault()
+    
+        if (!selectedCompanyId) {
+            alert('Please select a company before logging in.')
+            return;
+        }
+    
+        const data = await login({
+            email: e.target.formBasicEmail.value,
+            password: e.target.formBasicPassword.value,
+            company: selectedCompanyId
+        })
+        // gestione accesso utente
+        if (data.token) {
+            setAlertMessage('Login successful!')
+            setAlertVariant('success')
+    
+            // navigate()
+        } else {
+            setAlertMessage(data.message || 'Login failed')
+            setAlertVariant('danger')
+        }
+    }
+
     return (
         <div className="container mt-5">
             {!showCompanyRegistration ? (
@@ -132,8 +161,13 @@ function AuthPage() {
 
                     {showLogin && (
                         <div className="mt-4">
+                            {alertMessage && (
+                                <Alert variant={alertVariant} onClose={() => setAlertMessage(null)} dismissible>
+                                    {alertMessage}
+                                </Alert>
+                            )}
                             <h3>Login in your Company and use gestionaleaziendale</h3>
-                            <Form>
+                            <Form onSubmit={handleLoginSubmit}>
                                 <Form.Group controlId="formBasicEmail" className="mb-3">
                                     <Form.Label>Email</Form.Label>
                                     <Form.Control type="email" placeholder="Insert email" />

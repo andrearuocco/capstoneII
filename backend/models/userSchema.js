@@ -28,6 +28,7 @@ const userSchema = new Schema({
             return this.isAdmin //questo campo in questo modo è richiesto solo se l'utente è amministratore
         },
     },
+    googleId: String,
     position: { 
         type: String, 
         required: function () {
