@@ -75,7 +75,7 @@ function AuthPage() {
             if (!selectedCompany) {
                 setAlertMessage('Select your company to login.')
                 setAlertVariant('danger')
-                return
+                return;
             }
     
             const hasAdmins = selectedCompany.admins && selectedCompany.admins.length > 0
@@ -83,7 +83,20 @@ function AuthPage() {
     
             if (!hasAdmins && !hasEmployees) {
                 setAdminFormState(prev => ({ ...prev, companyId: selectedCompanyId }))
-                setShowAdminModalLogin(true)
+                const loginData = await login({
+                    email: adminFormState.email,
+                    password: adminFormState.password,
+                    company: selectedCompanyId,
+                })
+    
+                if (loginData?.token) {
+                    localStorage.setItem('token', loginData.token)
+                    setToken(loginData.token)
+                    navigate('/dashboard')
+                } else {
+                    setAlertMessage(loginData?.message || 'Login failed.')
+                    setAlertVariant('danger')
+                }
             } else {
                 setShowLogin(true)
             }
@@ -107,9 +120,9 @@ function AuthPage() {
             const result = await createCompany(formState)
     
             if (result?.error || !result?.data?._id) {
-                setAlertMessage(result?.error || 'Failed!')
+                setAlertMessage(result?.error || 'Failed! Please try again.')
                 setAlertVariant('danger')
-                return; 
+                return;
             }
     
             const newCompanyId = result.data._id
@@ -120,7 +133,7 @@ function AuthPage() {
             setShowCompanyRegistration(false)
             setShowAdminModal(true)
         } catch (error) {
-            setAlertMessage('An error occurred,please try again.')
+            setAlertMessage('An error occurred while registering the company.')
             setAlertVariant('danger')
         }
     } //consente la registrazione di una nuova azienda e fa procedere alla registrazione come primo utente amministratore 
@@ -134,19 +147,20 @@ function AuthPage() {
         e.preventDefault()
         try {
             const result = await registerProfile(adminFormState)
-    
+
             if (result?.error || !result?.data?._id) {
-                setAlertMessage(result?.error || 'Failed!')
+                setAlertMessage(result?.error || 'Failed! Please try again.')
                 setAlertVariant('danger')
-                return; 
+                return;
             }
-    
-            setAlertMessage('Administrator registered successfully! Please upload the company logo.')
+
+            setAlertMessage('Administrator registered successfully!')
             setAlertVariant('success')
             setShowAdminModal(false)
+
             setShowLogoModal(true)
         } catch (error) {
-            setAlertMessage('An error occurred, please try again.')
+            setAlertMessage('An error occurred.')
             setAlertVariant('danger')
         }
     }
@@ -223,30 +237,30 @@ function AuthPage() {
             const result = await patchCompanyLogo(formState._id, formData)
     
             if (result?.error) {
-                setAlertMessage(result.error || 'Failed!')
+                setAlertMessage(result.error || 'Failed! Please try again.')
                 setAlertVariant('danger')
-                return; 
+                return;
             }
     
             setAlertMessage('Logo uploaded successfully!')
             setAlertVariant('success')
     
-            const data = await login({
+            const loginData = await login({
                 email: adminFormState.email,
                 password: adminFormState.password,
                 company: adminFormState.companyId,
             })
     
-            if (data?.token) {
-                localStorage.setItem('token', data.token)
-                setToken(data.token)
+            if (loginData?.token) {
+                localStorage.setItem('token', loginData.token)
+                setToken(loginData.token)
                 navigate('/dashboard')
             } else {
-                setAlertMessage(data?.message || 'Login failed.')
+                setAlertMessage(loginData?.message || 'Login failed.')
                 setAlertVariant('danger')
             }
         } catch (error) {
-            setAlertMessage('An error occurred, please try again.')
+            setAlertMessage('An error occurred.')
             setAlertVariant('danger')
         }
     }
@@ -551,7 +565,7 @@ function AuthPage() {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={handleLogoUpload}>
-                        Aggiorna
+                        Carica Logo
                     </Button>
                 </Modal.Footer>
             </Modal>
