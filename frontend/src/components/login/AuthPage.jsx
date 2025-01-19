@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Modal, Button, Form } from 'react-bootstrap'
+import { Modal, Button, Form, Alert } from 'react-bootstrap'
 import { fetchGetCompanies, createCompany } from '../../data/fetchCompany'
 import { registerProfile } from '../../data/fetchProfile'
 import { login } from '../../data/fetchAuth'
-import { Alert } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { ProfileContext } from '../context/ProfileContextProvider'
 
 function AuthPage() {
     const [companies, setCompanies] = useState([])
     const [selectedCompanyId, setSelectedCompanyId] = useState(null)
-    const [showLogin, setShowLogin] = useState(false) //mostra il form per l'accesso degli utenti registrati
+    const [showLogin, setShowLogin] = useState(false)
     const [showCompanyRegistration, setShowCompanyRegistration] = useState(false)
     const [showAdminModal, setShowAdminModal] = useState(false)
+    const [showLogoModal, setShowLogoModal] = useState(false)
     const [alertMessage, setAlertMessage] = useState(null)
     const [alertVariant, setAlertVariant] = useState('success')
-    const { token, setToken, userInfo, setUserInfo } = useContext(ProfileContext)
+    const { token, setToken } = useContext(ProfileContext)
     const navigate = useNavigate()
     const [formState, setFormState] = useState({
         companyName: '',
@@ -41,7 +41,6 @@ function AuthPage() {
         password: '',
     })
 
-    //carica la fetch di tutte le aziende 
     const loadCompanies = async () => {
         const data = await fetchGetCompanies()
         if (data) {
@@ -53,77 +52,78 @@ function AuthPage() {
     }, [])
 
     const handleCompanyFormChange = (e) => {
-        const { id, value } = e.target;
+        const { id, value } = e.target
         if (id.startsWith('address.')) {
-            const addressField = id.split('.')[1];
+            const addressField = id.split('.')[1]
             setFormState((prev) => ({
                 ...prev,
                 address: {
                     ...prev.address,
                     [addressField]: value,
                 },
-            }));
+            }))
         } else {
-            setFormState({ ...formState, [id]: value });
+            setFormState({ ...formState, [id]: value })
         }
-    }; //cattura l'evento quando l'utente visitatore inserisce i dati da compilare nel form per la registrazione di una nuova azienda
+    } //cattura l'evento quando l'utente visitatore inserisce i dati da compilare nel form per la registrazione di una nuova azienda
 
     const handleCompanySelection = () => {
         if (selectedCompanyId) {
             setShowLogin(true)
         } else {
-            alert('Select your company to login.')
+            alert('Select your company to login.') //alert bootstrap per mess di mancata selezione di una nuova azienda 
         }
     } //mostra il form di login per accedere come utente dell'azienda selezionata 
 
     const handleNewCompanyRegistration = () => {
-        setShowCompanyRegistration(true) //mostra form di registrazione per nuova azienda 
+        setShowCompanyRegistration(true) //mostra form per registrazione nuova azienda 
     }
 
     const handleCompanySubmit = async (e) => {
-        e.preventDefault();
-        const result = await createCompany(formState);
+        e.preventDefault()
+        const result = await createCompany(formState)
+        console.log(result)
         if (result?.error) {
-            setAlertMessage(result.error);
-            setAlertVariant('danger');
+            setAlertMessage(result.error)
+            setAlertVariant('danger')
         } else {
-            const newCompanyId = result.data?._id;
-            setFormState((prev) => ({ ...prev, _id: newCompanyId }));
-            setAdminFormState((prev) => ({ ...prev, companyId: newCompanyId }));
-            setAlertMessage('Company registered successfully! Proceed to admin registration.');
-            setAlertVariant('success');
-            setShowCompanyRegistration(false);
-            setShowAdminModal(true);
+            const newCompanyId = result.data?._id
+            setFormState((prev) => ({ ...prev, _id: newCompanyId }))
+            setAdminFormState((prev) => ({ ...prev, companyId: newCompanyId }))
+            setAlertMessage('Company registered successfully! Proceed to admin registration.')
+            setAlertVariant('success')
+            setShowCompanyRegistration(false)
+            setShowAdminModal(true)
         }
-    };
+    } //consente la registrazione di una nuova azienda e fa procedere alla registrazione come primo utente amministratore 
 
     const handleAdminFormChange = (e) => {
-        const { id, value } = e.target;
-        setAdminFormState({ ...adminFormState, [id]: value });
-    };
+        const { id, value } = e.target
+        setAdminFormState({ ...adminFormState, [id]: value })
+    }
 
     const handleAdminSubmit = async (e) => {
-        e.preventDefault();
-        const result = await registerProfile(adminFormState);
+        e.preventDefault()
+        const result = await registerProfile(adminFormState)
         if (result?.error) {
-            setAlertMessage(result.error);
-            setAlertVariant('danger');
+            setAlertMessage(result.error)
+            setAlertVariant('danger')
         } else {
-            setAlertMessage('Administrator registered successfully! Please upload the company logo.');
-            setAlertVariant('success');
-            setShowAdminModal(false);
-            /* setShowLogoModal(true); */
+            setAlertMessage('Administrator registered successfully! Please upload the company logo.')
+            setAlertVariant('success')
+            setShowAdminModal(false)
+            setShowLogoModal(true)
         }
-    };
+    }
 
     const handleLoginSubmit = async (e) => {
         e.preventDefault()
-    
+
         if (!selectedCompanyId) {
             alert('Please select a company before logging in.')
             return;
         }
-    
+
         const data = await login({
             email: e.target.formBasicEmail.value,
             password: e.target.formBasicPassword.value,
@@ -149,6 +149,7 @@ function AuthPage() {
             {!showCompanyRegistration ? (
                 <div className="text-center">
                     <h1>Welcome!!</h1>
+
                     <div className="mt-4">
                         <Form.Group controlId="companySelection" className="mb-3">
                             <Form.Label>Select your Company</Form.Label>
@@ -181,6 +182,7 @@ function AuthPage() {
                             )}
                             <h3>Login in your Company and use gestionaleaziendale</h3>
                             <Form onSubmit={handleLoginSubmit}>
+
                                 <Form.Group controlId="formBasicEmail" className="mb-3">
                                     <Form.Label>Email</Form.Label>
                                     <Form.Control type="email" placeholder="Insert email" />
@@ -240,7 +242,7 @@ function AuthPage() {
                             />
                         </Form.Group>
 
-                        <h4>Company Address</h4>
+                        <h6>Company Address</h6>
                         <Form.Group controlId="address.street" className="mb-3">
                             <Form.Label>Address/Street</Form.Label>
                             <Form.Control
@@ -249,7 +251,6 @@ function AuthPage() {
                                 onChange={handleCompanyFormChange}
                             />
                         </Form.Group>
-
                         <Form.Group controlId="address.city" className="mb-3">
                             <Form.Label>City</Form.Label>
                             <Form.Control
@@ -258,7 +259,6 @@ function AuthPage() {
                                 onChange={handleCompanyFormChange}
                             />
                         </Form.Group>
-
                         <Form.Group controlId="address.postalCode" className="mb-3">
                             <Form.Label>CAP</Form.Label>
                             <Form.Control
@@ -267,7 +267,6 @@ function AuthPage() {
                                 onChange={handleCompanyFormChange}
                             />
                         </Form.Group>
-
                         <Form.Group controlId="address.province" className="mb-3">
                             <Form.Label>Where - Provincia</Form.Label>
                             <Form.Control
@@ -276,7 +275,6 @@ function AuthPage() {
                                 onChange={handleCompanyFormChange}
                             />
                         </Form.Group>
-
                         <Form.Group controlId="address.country" className="mb-3">
                             <Form.Label>From</Form.Label>
                             <Form.Control
@@ -285,7 +283,6 @@ function AuthPage() {
                                 onChange={handleCompanyFormChange}
                             />
                         </Form.Group>
-
                         <Button variant="success" type="submit">
                             Register Company
                         </Button>
@@ -361,7 +358,7 @@ function AuthPage() {
                 </Modal.Body>
             </Modal>
 
-            <Modal /* show={showLogoModal} onHide={() => setShowLogoModal(false)} */>
+            <Modal show={showLogoModal} onHide={() => setShowLogoModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Upload Company Logo</Modal.Title>
                 </Modal.Header>
@@ -369,10 +366,7 @@ function AuthPage() {
                     <Form /* onSubmit={handleLogoUpload} */>
                         <Form.Group controlId="logoFile" className="mb-3">
                             <Form.Label>Logo File</Form.Label>
-                            <Form.Control
-                                type="file"
-                                /* onChange={(e) => setLogoFile(e.target.files[0])} */
-                            />
+                            <Form.Control type="file" />
                         </Form.Group>
                         <Button variant="primary" type="submit">
                             Upload Logo

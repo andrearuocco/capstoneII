@@ -19,7 +19,8 @@ export const createCompany = async (newCompany) => {
             method: 'POST',
             body: JSON.stringify(newCompany)
         })
-
+        const data = await res.json()
+        return { data }
     } catch (error) {
         return { error: 'Server down, try again.' }
     }
