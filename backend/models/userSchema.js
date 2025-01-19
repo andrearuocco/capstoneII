@@ -28,7 +28,6 @@ const userSchema = new Schema({
             return this.isAdmin //questo campo in questo modo è richiesto solo se l'utente è amministratore
         },
     },
-    googleId: String,
     position: { 
         type: String, 
         required: function () {
@@ -47,7 +46,7 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Payroll', //quando è un dipendente allora avra una voce bustapaga
     }],
-    password: { type: String }, 
+    password: { type: String, required: true }, 
     /* employees */
     annualLeave: { type: Number, default: 20, required: function () { return !this.isAdmin } }, //ferie
     paidLeave: { type: Number, default: 0, required: function () { return !this.isAdmin } }, 

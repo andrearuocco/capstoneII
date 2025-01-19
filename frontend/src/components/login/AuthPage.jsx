@@ -73,8 +73,9 @@ function AuthPage() {
         if (selectedCompanyId) {
             const selectedCompany = companies.find(company => company._id === selectedCompanyId)
             if (!selectedCompany) {
-                alert('Select your company to login.')
-                return;
+                setAlertMessage('Select your company to login.')
+                setAlertVariant('danger')
+                return
             }
     
             const hasAdmins = selectedCompany.admins && selectedCompany.admins.length > 0
@@ -87,7 +88,8 @@ function AuthPage() {
                 setShowLogin(true)
             }
         } else {
-            alert('Select your company to login.')
+            setAlertMessage('Select your company to login.')
+            setAlertVariant('danger')
         }
     } //mostra il form di login per accedere come utente dell'azienda selezionata o il form di registrazione primo utente amministratore se l'azienda non ha utenze
 
@@ -95,21 +97,31 @@ function AuthPage() {
         setShowCompanyRegistration(true) //mostra form per registrazione nuova azienda 
     }
 
+    const handleCloseRegistration = () => {
+        setShowCompanyRegistration(false) 
+    }
+
     const handleCompanySubmit = async (e) => {
         e.preventDefault()
-        const result = await createCompany(formState)
-        console.log(result)
-        if (result?.error) {
-            setAlertMessage(result.error)
-            setAlertVariant('danger')
-        } else {
-            const newCompanyId = result.data?._id
+        try {
+            const result = await createCompany(formState)
+    
+            if (result?.error || !result?.data?._id) {
+                setAlertMessage(result?.error || 'Failed!')
+                setAlertVariant('danger')
+                return; 
+            }
+    
+            const newCompanyId = result.data._id
             setFormState((prev) => ({ ...prev, _id: newCompanyId }))
             setAdminFormState((prev) => ({ ...prev, companyId: newCompanyId }))
             setAlertMessage('Company registered successfully! Proceed to admin registration.')
             setAlertVariant('success')
             setShowCompanyRegistration(false)
             setShowAdminModal(true)
+        } catch (error) {
+            setAlertMessage('An error occurred,please try again.')
+            setAlertVariant('danger')
         }
     } //consente la registrazione di una nuova azienda e fa procedere alla registrazione come primo utente amministratore 
 
@@ -120,15 +132,22 @@ function AuthPage() {
 
     const handleAdminSubmit = async (e) => {
         e.preventDefault()
-        const result = await registerProfile(adminFormState)
-        if (result?.error) {
-            setAlertMessage(result.error)
-            setAlertVariant('danger')
-        } else {
+        try {
+            const result = await registerProfile(adminFormState)
+    
+            if (result?.error || !result?.data?._id) {
+                setAlertMessage(result?.error || 'Failed!')
+                setAlertVariant('danger')
+                return; 
+            }
+    
             setAlertMessage('Administrator registered successfully! Please upload the company logo.')
             setAlertVariant('success')
             setShowAdminModal(false)
             setShowLogoModal(true)
+        } catch (error) {
+            setAlertMessage('An error occurred, please try again.')
+            setAlertVariant('danger')
         }
     }
 
@@ -165,7 +184,8 @@ function AuthPage() {
         e.preventDefault()
 
         if (!selectedCompanyId) {
-            alert('Please select a company before logging in.')
+            setAlertMessage('Please select a company before logging in.')
+            setAlertVariant('danger')
             return;
         }
 
@@ -191,35 +211,58 @@ function AuthPage() {
 
     const handleLogoUpload = async () => {
         if (!selectedLogo) {
-            setAlertMessage("Insert a file as logo and you are going in dashboard.")
-            return
+            setAlertMessage('Please select a logo file before uploading.')
+            setAlertVariant('danger')
+            return;
         }
+    
         const formData = new FormData()
         formData.append('logo', selectedLogo)
-        const result = await patchCompanyLogo(formState._id, formData)
-        if (result?.error) {
-            setAlertMessage(result.error)
-            setAlertVariant('danger')
-        } else {
+    
+        try {
+            const result = await patchCompanyLogo(formState._id, formData)
+    
+            if (result?.error) {
+                setAlertMessage(result.error || 'Failed!')
+                setAlertVariant('danger')
+                return; 
+            }
+    
             setAlertMessage('Logo uploaded successfully!')
             setAlertVariant('success')
+    
             const data = await login({
                 email: adminFormState.email,
                 password: adminFormState.password,
-                company: adminFormState.companyId
+                company: adminFormState.companyId,
             })
-            localStorage.setItem('token', data.token) // salviamo il token nel localStorage
-            setToken(data.token) // aggiorniamo il token nello stato del contesto
-            navigate('/dashboard')
+    
+            if (data?.token) {
+                localStorage.setItem('token', data.token)
+                setToken(data.token)
+                navigate('/dashboard')
+            } else {
+                setAlertMessage(data?.message || 'Login failed.')
+                setAlertVariant('danger')
+            }
+        } catch (error) {
+            setAlertMessage('An error occurred, please try again.')
+            setAlertVariant('danger')
         }
     }
     
     return (
         <div className="container mt-5">
+
+            {alertMessage && (
+                <Alert variant={alertVariant} onClose={() => setAlertMessage(null)} dismissible>
+                    {alertMessage}
+                </Alert>
+            )}
+
             {!showCompanyRegistration ? (
                 <div className="text-center">
                     <h1>Welcome!!</h1>
-
                     <div className="mt-4">
                         <Form.Group controlId="companySelection" className="mb-3">
                             <Form.Label>Select your Company</Form.Label>
@@ -245,11 +288,6 @@ function AuthPage() {
 
                     {showLogin && (
                         <div className="mt-4">
-                            {alertMessage && (
-                                <Alert variant={alertVariant} onClose={() => setAlertMessage(null)} dismissible>
-                                    {alertMessage}
-                                </Alert>
-                            )}
                             <h3>Login in your Company and use gestionaleaziendale</h3>
                             <Form onSubmit={handleLoginSubmit}>
 
@@ -356,9 +394,13 @@ function AuthPage() {
                         <Button variant="success" type="submit">
                             Register Company
                         </Button>
+                        <Button variant="success" onClick={handleCloseRegistration}>
+                            Close
+                        </Button>
                     </Form>
                 </div>
             )}
+
             <Modal show={showAdminModal} onHide={() => setShowAdminModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Register Administrator</Modal.Title>
@@ -506,9 +548,6 @@ function AuthPage() {
                         <Form.Label>Inserisci un file per caricare un nuovo avatar</Form.Label>
                         <Form.Control type="file" onChange={(e) => setSelectedLogo(e.target.files[0])} />
                     </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Upload Logo
-                    </Button>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={handleLogoUpload}>
