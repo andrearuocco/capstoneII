@@ -12,7 +12,6 @@ function AuthPage() {
     const [showLogin, setShowLogin] = useState(false)
     const [showCompanyRegistration, setShowCompanyRegistration] = useState(false)
     const [showAdminModal, setShowAdminModal] = useState(false)
-    const [showAdminModalLogin, setShowAdminModalLogin] = useState(false)
     const [showLogoModal, setShowLogoModal] = useState(false)
     const [alertMessage, setAlertMessage] = useState(null)
     const [alertVariant, setAlertVariant] = useState('success')
@@ -71,41 +70,29 @@ function AuthPage() {
 
     const handleCompanySelection = async () => {
         if (selectedCompanyId) {
+            setShowLogin(true)
             const selectedCompany = companies.find(company => company._id === selectedCompanyId)
             if (!selectedCompany) {
                 setAlertMessage('Select your company to login.')
                 setAlertVariant('danger')
                 return;
             }
-    
+
             const hasAdmins = selectedCompany.admins && selectedCompany.admins.length > 0
             const hasEmployees = selectedCompany.employees && selectedCompany.employees.length > 0
-    
+
             if (!hasAdmins && !hasEmployees) {
                 setAdminFormState(prev => ({ ...prev, companyId: selectedCompanyId }))
-                const loginData = await login({
-                    email: adminFormState.email,
-                    password: adminFormState.password,
-                    company: selectedCompanyId,
-                })
-    
-                if (loginData?.token) {
-                    localStorage.setItem('token', loginData.token)
-                    setToken(loginData.token)
-                    navigate('/dashboard')
-                } else {
-                    setAlertMessage(loginData?.message || 'Login failed.')
-                    setAlertVariant('danger')
-                }
+                setShowAdminModal(true)
             } else {
                 setShowLogin(true)
             }
         } else {
-            setAlertMessage('Select your company to login.')
+            setAlertMessage('Select your company to login.') //alert bootstrap per mess di mancata selezione di una nuova azienda 
             setAlertVariant('danger')
         }
     } //mostra il form di login per accedere come utente dell'azienda selezionata o il form di registrazione primo utente amministratore se l'azienda non ha utenze
-
+    
     const handleNewCompanyRegistration = () => {
         setShowCompanyRegistration(true) //mostra form per registrazione nuova azienda 
     }
@@ -147,25 +134,24 @@ function AuthPage() {
         e.preventDefault()
         try {
             const result = await registerProfile(adminFormState)
-    
-            if (result?.error || !result?.data?._id) {
-                setAlertMessage(result?.error || 'Failed! Please try again.')
-                setAlertVariant('danger')
-                return;
-            }
-    
+
             setAlertMessage('Administrator registered successfully!')
             setAlertVariant('success')
             setShowAdminModal(false)
-            setShowLogoModal(true)
+
+            if (formState._id) {
+                setShowLogoModal(true)
+            } else {
+                navigate('/dashboard')
+            }
         } catch (error) {
             setAlertMessage('An error occurred.')
-            setAlertVariant('danger')
+            setAlertVariant('danger');
         }
     }
 
-    const handleAdminSubmitFromLogin = async (e) => {
-        e.preventDefault();
+    /* const handleAdminSubmitFromLogin = async (e) => {
+        e.preventDefault()
         try {
             const result = await registerProfile(adminFormState)
     
@@ -180,7 +166,7 @@ function AuthPage() {
                 const data = await login({
                     email: adminFormState.email,
                     password: adminFormState.password,
-                    company: adminFormState.companyId
+                    company: adminFormState.companyId,
                 })
     
                 if (data?.token) {
@@ -196,7 +182,7 @@ function AuthPage() {
             setAlertMessage('An error occurred.')
             setAlertVariant('danger')
         }
-    }
+    } */
 
     const handleLoginSubmit = async (e) => {
         e.preventDefault()
@@ -210,7 +196,7 @@ function AuthPage() {
         const data = await login({
             email: e.target.formBasicEmail.value,
             password: e.target.formBasicPassword.value,
-            company: selectedCompanyId
+            company: selectedCompanyId,
         })
         // gestione accesso utente
         if (data && data.token) { // controlliamo se il token esiste
@@ -253,7 +239,7 @@ function AuthPage() {
             const loginData = await login({
                 email: adminFormState.email,
                 password: adminFormState.password,
-                company: adminFormState.companyId
+                company: adminFormState.companyId,
             })
     
             if (loginData?.token) {
@@ -489,7 +475,7 @@ function AuthPage() {
                 </Modal.Body>
             </Modal>
 
-            <Modal show={showAdminModalLogin} onHide={() => setShowAdminModalLogin(false)}>
+            {/* <Modal show={showAdminModalLogin} onHide={() => setShowAdminModalLogin(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Register Administrator</Modal.Title>
                 </Modal.Header>
@@ -556,7 +542,7 @@ function AuthPage() {
                         </Button>
                     </Form>
                 </Modal.Body>
-            </Modal>
+            </Modal> */}
 
             <Modal show={showLogoModal} onHide={() => setShowLogoModal(false)}>
                 <Modal.Header closeButton>
