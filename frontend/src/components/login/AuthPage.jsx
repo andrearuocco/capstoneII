@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Modal, Button, Form, Alert } from 'react-bootstrap'
-import { fetchGetCompanies, createCompany } from '../../data/fetchCompany'
+import { fetchGetCompanies, createCompany, patchCompanyLogo } from '../../data/fetchCompany'
 import { registerProfile } from '../../data/fetchProfile'
 import { login } from '../../data/fetchAuth'
 import { useNavigate } from 'react-router-dom'
@@ -12,9 +12,11 @@ function AuthPage() {
     const [showLogin, setShowLogin] = useState(false)
     const [showCompanyRegistration, setShowCompanyRegistration] = useState(false)
     const [showAdminModal, setShowAdminModal] = useState(false)
+    const [showAdminModalLogin, setShowAdminModalLogin] = useState(false)
     const [showLogoModal, setShowLogoModal] = useState(false)
     const [alertMessage, setAlertMessage] = useState(null)
     const [alertVariant, setAlertVariant] = useState('success')
+    const [selectedLogo, setSelectedLogo] = useState(null)
     const { token, setToken } = useContext(ProfileContext)
     const navigate = useNavigate()
     const [formState, setFormState] = useState({
@@ -67,13 +69,27 @@ function AuthPage() {
         }
     } //cattura l'evento quando l'utente visitatore inserisce i dati da compilare nel form per la registrazione di una nuova azienda
 
-    const handleCompanySelection = () => {
+    const handleCompanySelection = async () => {
         if (selectedCompanyId) {
-            setShowLogin(true)
+            const selectedCompany = companies.find(company => company._id === selectedCompanyId)
+            if (!selectedCompany) {
+                alert('Select your company to login.')
+                return;
+            }
+    
+            const hasAdmins = selectedCompany.admins && selectedCompany.admins.length > 0
+            const hasEmployees = selectedCompany.employees && selectedCompany.employees.length > 0
+    
+            if (!hasAdmins && !hasEmployees) {
+                setAdminFormState(prev => ({ ...prev, companyId: selectedCompanyId }))
+                setShowAdminModalLogin(true)
+            } else {
+                setShowLogin(true)
+            }
         } else {
-            alert('Select your company to login.') //alert bootstrap per mess di mancata selezione di una nuova azienda 
+            alert('Select your company to login.')
         }
-    } //mostra il form di login per accedere come utente dell'azienda selezionata 
+    } //mostra il form di login per accedere come utente dell'azienda selezionata o il form di registrazione primo utente amministratore se l'azienda non ha utenze
 
     const handleNewCompanyRegistration = () => {
         setShowCompanyRegistration(true) //mostra form per registrazione nuova azienda 
@@ -116,6 +132,35 @@ function AuthPage() {
         }
     }
 
+    const handleAdminSubmitFromLogin = async (e) => {
+        e.preventDefault()
+    
+        const result = await registerProfile(adminFormState)
+        if (result?.error) {
+            setAlertMessage(result.error)
+            setAlertVariant('danger')
+        } else {
+            setAlertMessage('Administrator registered successfully!')
+            setAlertVariant('success')
+            setShowAdminModalLogin(false)
+            
+            const data = await login({
+                email: adminFormState.email,
+                password: adminFormState.password,
+                company: adminFormState.companyId,
+            })
+    
+            if (data && data.token) {
+                localStorage.setItem('token', data.token)
+                setToken(data.token)
+                navigate('/dashboard')
+            } else {
+                setAlertMessage(data.message || 'Login failed')
+                setAlertVariant('danger')
+            }
+        }
+    }
+
     const handleLoginSubmit = async (e) => {
         e.preventDefault()
 
@@ -144,6 +189,31 @@ function AuthPage() {
         }
     }
 
+    const handleLogoUpload = async () => {
+        if (!selectedLogo) {
+            setAlertMessage("Insert a file as logo and you are going in dashboard.")
+            return
+        }
+        const formData = new FormData()
+        formData.append('logo', selectedLogo)
+        const result = await patchCompanyLogo(formState._id, formData)
+        if (result?.error) {
+            setAlertMessage(result.error)
+            setAlertVariant('danger')
+        } else {
+            setAlertMessage('Logo uploaded successfully!')
+            setAlertVariant('success')
+            const data = await login({
+                email: adminFormState.email,
+                password: adminFormState.password,
+                company: adminFormState.companyId
+            })
+            localStorage.setItem('token', data.token) // salviamo il token nel localStorage
+            setToken(data.token) // aggiorniamo il token nello stato del contesto
+            navigate('/dashboard')
+        }
+    }
+    
     return (
         <div className="container mt-5">
             {!showCompanyRegistration ? (
@@ -358,22 +428,95 @@ function AuthPage() {
                 </Modal.Body>
             </Modal>
 
+            <Modal show={showAdminModalLogin} onHide={() => setShowAdminModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Register Administrator</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleAdminSubmitFromLogin}>
+                        <Form.Group controlId="firstName" className="mb-3">
+                            <Form.Label>First Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter first name"
+                                onChange={handleAdminFormChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="lastName" className="mb-3">
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter last name"
+                                onChange={handleAdminFormChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="email" className="mb-3">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Enter email"
+                                onChange={handleAdminFormChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="phone" className="mb-3">
+                            <Form.Label>Phone</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter phone"
+                                onChange={handleAdminFormChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="adminRole" className="mb-3">
+                            <Form.Label>Admin Role</Form.Label>
+                            <Form.Select
+                                onChange={handleAdminFormChange}
+                                defaultValue="Direttore"
+                            >
+                                <option value="Socio">Socio</option>
+                                <option value="Amministratore Delegato">Amministratore Delegato</option>
+                                <option value="Direttore Tecnico">Direttore Tecnico</option>
+                                <option value="Consigliere">Consigliere</option>
+                                <option value="Direttore">Direttore</option>
+                                <option value="Geometra">Geometra</option>
+                                <option value="Responsabile Risorse Umane">Responsabile Risorse Umane</option>
+                                <option value="Responsabile">Responsabile</option>
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group controlId="password" className="mb-3">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Enter password"
+                                onChange={handleAdminFormChange}
+                            />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">
+                            Register Admin
+                        </Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
+
             <Modal show={showLogoModal} onHide={() => setShowLogoModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Upload Company Logo</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form /* onSubmit={handleLogoUpload} */>
-                        <Form.Group controlId="logoFile" className="mb-3">
-                            <Form.Label>Logo File</Form.Label>
-                            <Form.Control type="file" />
-                        </Form.Group>
-                        <Button variant="primary" type="submit">
-                            Upload Logo
-                        </Button>
-                    </Form>
+                    <Form.Group controlId="logoFile" className="mb-3">
+                        <Form.Label>Inserisci un file per caricare un nuovo avatar</Form.Label>
+                        <Form.Control type="file" onChange={(e) => setSelectedLogo(e.target.files[0])} />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                        Upload Logo
+                    </Button>
                 </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={handleLogoUpload}>
+                        Aggiorna
+                    </Button>
+                </Modal.Footer>
             </Modal>
+
         </div>
     )
 }

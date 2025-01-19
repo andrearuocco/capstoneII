@@ -170,3 +170,5 @@ export const searchUsers = async (req, res) => {
         res.status(500).send({ message: 'Error, try again.', error })
     }
 }
+
+

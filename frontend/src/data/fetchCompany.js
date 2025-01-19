@@ -28,7 +28,7 @@ export const createCompany = async (newCompany) => {
 
 export const companyId = async (id) => {
     try {
-        const res = await fetch(`${fetchCompanyUrl}/:id`, {
+        const res = await fetch(`${fetchCompanyUrl}/${id}`, {
             method: 'GET',
         })
         if (res.ok) {
@@ -39,6 +39,22 @@ export const companyId = async (id) => {
             return { error: errorData.message || 'Not Found' }
         }
     } catch (error) {
-        return { error: 'Riprova più tardi' }
+        return { error: 'Server down, try again.' }
+    }
+}
+
+export const patchCompanyLogo = async (id, logo) => {
+    try {
+
+        const response = await fetch(`${fetchCompanyUrl}/${id}/logo`, {
+            method: 'PATCH',
+            body: logo,
+        })
+        if (!response.ok) {
+            throw new Error('This company got a new logo.')
+        }
+        
+    } catch (error) {
+        console.error('Server down, try again.', error)
     }
 }

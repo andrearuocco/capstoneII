@@ -77,3 +77,15 @@ export const deleteCompany = async (req, res) => {
         res.status(404).send({message: `Azienda ${id} non trovata.`})
     }
 }
+
+export const patchCompanyLogo = async (req, res) => {
+    // la patch serve per modificare una risorsa nel DB che esiste già
+    const { id } = req.params // recupero l'id dalla richiesta
+    try {
+        const profile = await Company.findByIdAndUpdate(id, { logo: req.file.path }, { new: true }) // trovo company attraverso il proprio id esplicitato nella richiesta e lo modifica secondo il corpo di quest'ultima
+
+        res.status(200).send(profile)
+    } catch(error) {
+        res.status(400).send(error)
+    }
+}
