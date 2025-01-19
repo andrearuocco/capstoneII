@@ -147,17 +147,16 @@ function AuthPage() {
         e.preventDefault()
         try {
             const result = await registerProfile(adminFormState)
-
+    
             if (result?.error || !result?.data?._id) {
                 setAlertMessage(result?.error || 'Failed! Please try again.')
                 setAlertVariant('danger')
                 return;
             }
-
+    
             setAlertMessage('Administrator registered successfully!')
             setAlertVariant('success')
             setShowAdminModal(false)
-
             setShowLogoModal(true)
         } catch (error) {
             setAlertMessage('An error occurred.')
@@ -166,31 +165,36 @@ function AuthPage() {
     }
 
     const handleAdminSubmitFromLogin = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        try {
+            const result = await registerProfile(adminFormState)
     
-        const result = await registerProfile(adminFormState)
-        if (result?.error) {
-            setAlertMessage(result.error)
-            setAlertVariant('danger')
-        } else {
-            setAlertMessage('Administrator registered successfully!')
-            setAlertVariant('success')
-            setShowAdminModalLogin(false)
-            
-            const data = await login({
-                email: adminFormState.email,
-                password: adminFormState.password,
-                company: adminFormState.companyId,
-            })
-    
-            if (data && data.token) {
-                localStorage.setItem('token', data.token)
-                setToken(data.token)
-                navigate('/dashboard')
-            } else {
-                setAlertMessage(data.message || 'Login failed')
+            if (result?.error) {
+                setAlertMessage(result.error)
                 setAlertVariant('danger')
+            } else {
+                setAlertMessage('Administrator registered successfully!')
+                setAlertVariant('success')
+                setShowAdminModalLogin(false)
+    
+                const data = await login({
+                    email: adminFormState.email,
+                    password: adminFormState.password,
+                    company: adminFormState.companyId
+                })
+    
+                if (data?.token) {
+                    localStorage.setItem('token', data.token)
+                    setToken(data.token)
+                    navigate('/dashboard')
+                } else {
+                    setAlertMessage(data.message || 'Login failed')
+                    setAlertVariant('danger')
+                }
             }
+        } catch (error) {
+            setAlertMessage('An error occurred.')
+            setAlertVariant('danger')
         }
     }
 
@@ -245,10 +249,11 @@ function AuthPage() {
             setAlertMessage('Logo uploaded successfully!')
             setAlertVariant('success')
     
+            //dopo il caricamento del logo, accedi alla dashboard
             const loginData = await login({
                 email: adminFormState.email,
                 password: adminFormState.password,
-                company: adminFormState.companyId,
+                company: adminFormState.companyId
             })
     
             if (loginData?.token) {
@@ -484,7 +489,7 @@ function AuthPage() {
                 </Modal.Body>
             </Modal>
 
-            <Modal show={showAdminModalLogin} onHide={() => setShowAdminModal(false)}>
+            <Modal show={showAdminModalLogin} onHide={() => setShowAdminModalLogin(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Register Administrator</Modal.Title>
                 </Modal.Header>
