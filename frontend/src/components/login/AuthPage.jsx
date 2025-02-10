@@ -200,12 +200,10 @@ function AuthPage() {
         })
         // gestione accesso utente
         if (data && data.token) { // controlliamo se il token esiste
-            localStorage.setItem('token', data.token) // salviamo il token nel localStorage
-            setToken(data.token) // aggiorniamo il token nello stato del contesto
-
             setAlertMessage('Login successful!')
             setAlertVariant('success')
-
+            localStorage.setItem('token', data.token) // salviamo il token nel localStorage
+            setToken(data.token) // aggiorniamo il token nello stato del contesto
             navigate('/dashboard')
         } else {
             setAlertMessage(data.message || 'Login failed')
