@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import AuthPage from './components/login/AuthPage';
+import AuthPage from './components/view/AuthPage';
 import ProfileContextProvider from './components/context/ProfileContextProvider';
 import PannelloControllo from './components/dashboard/PannelloControllo';
 
