@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 const companySchema = new Schema({
-    companyName: { type: String, required: true },
+    companyName: { type: String, required: true, unique: true },
     vatNumber: { type: String, required: true },
     address: {
         street: String,
