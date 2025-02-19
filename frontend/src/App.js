@@ -13,14 +13,17 @@ function App() {
       <Routes>
         <Route path="/" element={<AuthPage />} />
         <Route path="/dashboard" element={<div>18</div>} />
-        {/* <Route element={<ProtectedRoutes />}>
+        {/* 
+        <Route element={<ProtectedRoutes />}>
           <Route path="/:id" element={<div className="fade-in-appjs"><EmployeeEdit /></div>} />
           <Route path="/:id/payments/:employeeDataId" element={<div className="fade-in-appjs"><PayEnvelope /></div>} />
-        </Route> */}
+        </Route> 
+        */}
       </Routes>
 
     </Router></ProfileContextProvider>
   )
+  
 }
 
 export default App

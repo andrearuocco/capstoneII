@@ -6,7 +6,7 @@ function CompanySelection ({ companies, onSelectCompany, onRegisterCompany }) {
 
     const handleSelection = () => {
         if (!selectedCompanyId) {
-            setAlertMessage("Seleziona un'azienda o registra la tua per il login")
+            setAlertMessage("Seleziona la tua azienda per accedere.")
             return;
         }
         onSelectCompany(selectedCompanyId)
@@ -14,7 +14,7 @@ function CompanySelection ({ companies, onSelectCompany, onRegisterCompany }) {
 
     return (
         <div>
-            {alertMessage && <Alert variant='danger'>{alertMessage}</Alert>}
+            {alertMessage && <Alert variant='warning'>{alertMessage}</Alert>}
             <Form.Group controlId="companySelection" className="mb-3">
                 <Form.Label>Seleziona la tua Azienda</Form.Label>
                 <Form.Select onChange={(e) => setSelectedCompanyId(e.target.value)}>

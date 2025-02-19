@@ -7,7 +7,7 @@ function LoginForm ({ companyId, onLogin }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const response = await onLogin(email, password, companyId);
+        const response = await onLogin(email, password, companyId)
         if (!response.success) {
             setAlertMessage(response.message)
         }

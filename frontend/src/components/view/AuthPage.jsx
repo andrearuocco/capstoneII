@@ -6,6 +6,7 @@ import { ProfileContext } from '../context/ProfileContextProvider'
 import CompanyRegistrationForm from '../login/CompanyRegistrationForm'
 import LoginForm from '../login/LoginForm'
 import CompanySelection from '../login/CompanySelection'
+import { Container, Row, Col } from 'react-bootstrap'
 
 function AuthPage() {
     const [companies, setCompanies] = useState([])
@@ -45,18 +46,37 @@ function AuthPage() {
     }
 
     return (
-        <div className="container mt-5">
-            {!showCompanyRegistration ? (
-                <CompanySelection
-                    companies={companies}
-                    onSelectCompany={handleSelectCompany}
-                    onRegisterCompany={handleRegisterCompany}
-                />
-            ) : (
-                <CompanyRegistrationForm setShowCompanyRegistration={setShowCompanyRegistration} />
-            )}
-            {showLogin && <LoginForm companyId={selectedCompanyId} onLogin={handleLogin} />}
-        </div>
+        <Container className="bg-light">
+            <Row className="w-100">
+                
+                <Col xs={12} sm={6} className="p-4 d-flex align-items-center justify-content-center min-vh-100">
+                    <img
+                        src="/lavoriedili.png"
+                        alt="Logo"
+                        className="img-fluid"
+                    />
+                </Col>
+                <Col xs={12} sm={6} className="p-4">
+                    <div className="card w-100">
+                        <div className="card-body">
+                            <div className="container mt-5">
+                    {!showCompanyRegistration ? (
+                        <CompanySelection
+                            companies={companies}
+                            onSelectCompany={handleSelectCompany}
+                            onRegisterCompany={handleRegisterCompany}
+                        />
+                    ) : (
+                        <CompanyRegistrationForm setShowCompanyRegistration={setShowCompanyRegistration} />
+                    )}
+                    {showLogin && <LoginForm companyId={selectedCompanyId} onLogin={handleLogin} />}
+                            </div>
+                        </div>
+                    </div>
+                </Col>
+
+            </Row>
+        </Container>    
     )
 }
 
