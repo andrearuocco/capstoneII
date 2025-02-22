@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Form, Alert } from 'react-bootstrap'
-function CompanySelection ({ companies, onSelectCompany, onRegisterCompany }) {
+function CompanySelection ({ companies, onSelectCompany, onRegisterCompany, showCompanyRegistration }) {
     const [selectedCompanyId, setSelectedCompanyId] = useState(null)
     const [alertMessage, setAlertMessage] = useState(null)
 
@@ -24,8 +24,11 @@ function CompanySelection ({ companies, onSelectCompany, onRegisterCompany }) {
                     ))}
                 </Form.Select>
             </Form.Group>
-            <Button className="me-3" onClick={handleSelection}>Login</Button>
-            <Button variant="secondary" onClick={onRegisterCompany}>Registra Azienda</Button>
+            {!showCompanyRegistration ? (<>
+                <Button className="me-3" onClick={handleSelection}>Login</Button>
+
+                <Button variant="secondary" onClick={onRegisterCompany}>Registra Azienda</Button>
+            </>) : null}
         </div>
     )
 }

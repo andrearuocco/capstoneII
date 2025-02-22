@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Form } from 'react-bootstrap'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import { createCompany } from '../../data/fetchCompany'
 import AdminRegistrationForm from './AdminRegistrationForm'
 
@@ -41,8 +41,8 @@ function CompanyRegistrationForm ({ setShowCompanyRegistration }) {
     }
 
     return (<div>{!showUserRegistration ? 
-        (<Form onSubmit={handleSubmit}>
-            <h2>Register a new company</h2>
+        (<Form onSubmit={handleSubmit}><Row>
+            <Col xs={12} sm={6}><h3>Register a new company</h3>
 
             <Form.Group controlId="companyName" className="mb-3">
                 <Form.Label>Company Name</Form.Label>
@@ -78,9 +78,9 @@ function CompanyRegistrationForm ({ setShowCompanyRegistration }) {
                     placeholder="gestionaleaziendale"
                     onChange={handleChange}
                 />
-            </Form.Group>
+            </Form.Group></Col>
 
-            <h6>Company Address</h6>
+            <Col xs={12} sm={6}><h6>Company Address</h6>
             <Form.Group controlId="address.street" className="mb-3">
                 <Form.Label>Address/Street</Form.Label>
                 <Form.Control
@@ -120,7 +120,7 @@ function CompanyRegistrationForm ({ setShowCompanyRegistration }) {
                     placeholder="gestionaleaziendale"
                     onChange={handleChange}
                 />
-            </Form.Group>
+            </Form.Group></Col></Row>
 
             <Button variant="success" type="submit">
                 Register Company
