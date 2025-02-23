@@ -1,17 +1,13 @@
 import React, { useState } from 'react'
 import { Button, Form, Alert } from 'react-bootstrap'
 
-function LoginForm ({ companyId, onLogin, showCompanyRegistration}) {
+function LoginForm ({ companyId, onLogin, showCompanyRegistration, alertMessage, alertVariant }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [alertMessage, setAlertMessage] = useState(null)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         const response = await onLogin(email, password, companyId)
-        if (!response.success) {
-            setAlertMessage(response.message)
-        }
     }
 
     return (
