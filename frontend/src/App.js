@@ -11,7 +11,7 @@ function App() {
     <ProfileContextProvider><Router>
 
       <Routes>
-        <Route path="/" element={<AuthPage />} />
+        <Route path="/" element={<>Andrea</>} />
         <Route path="/dashboard" element={<div>18</div>} />
         {/* 
         <Route element={<ProtectedRoutes />}>
