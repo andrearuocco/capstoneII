@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Form, Alert } from 'react-bootstrap'
+<<<<<<< HEAD
 import './CompanySelection.css'
 import Select from 'react-select'
 
@@ -38,6 +39,9 @@ const customStyles = {
     })
 }
 function CompanySelection({ companies, onSelectCompany, onRegisterCompany, showCompanyRegistration }) {
+=======
+function CompanySelection ({ companies, onSelectCompany, onRegisterCompany }) {
+>>>>>>> parent of d5f6c4f (sab22)
     const [selectedCompanyId, setSelectedCompanyId] = useState(null)
     const [alertMessage, setAlertMessage] = useState(null)
     const [alertVariant, setAlertVariant] = useState('danger')
@@ -69,12 +73,17 @@ function CompanySelection({ companies, onSelectCompany, onRegisterCompany, showC
                     onChange={(selectedOption) => setSelectedCompanyId(selectedOption.value)}
                 />
             </Form.Group>
+<<<<<<< HEAD
             {!showCompanyRegistration ? (
                 <>
                     <Button className="me-3 button-blue-po" onClick={handleSelection}>Login</Button>
                     <Button className="button-nvm-po" onClick={onRegisterCompany}>Registra Azienda</Button>
                 </>
             ) : null}
+=======
+            <Button className="me-3" onClick={handleSelection}>Login</Button>
+            <Button variant="secondary" onClick={onRegisterCompany}>Registra Azienda</Button>
+>>>>>>> parent of d5f6c4f (sab22)
         </div>
     )
 }

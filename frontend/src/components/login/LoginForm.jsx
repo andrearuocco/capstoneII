@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Form, Alert } from 'react-bootstrap'
+<<<<<<< HEAD
 
 function LoginForm ({ companyId, onLogin, showCompanyRegistration, alertMessage, alertVariant }) {
+=======
+function LoginForm ({ companyId, onLogin }) {
+>>>>>>> parent of d5f6c4f (sab22)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -21,7 +25,7 @@ function LoginForm ({ companyId, onLogin, showCompanyRegistration, alertMessage,
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" placeholder="Inserisci password" onChange={(e) => setPassword(e.target.value)} />
             </Form.Group>
-            {!showCompanyRegistration ? (<Button variant="primary" type="submit">Accedi</Button>) : null}
+            <Button variant="primary" type="submit">Accedi</Button>
         </Form>
     )
 }

@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
+<<<<<<< HEAD
 import { Button, Form, Alert } from 'react-bootstrap'
+=======
+import { Button, Form } from 'react-bootstrap'
+>>>>>>> parent of d5f6c4f (sab22)
 import { createCompany } from '../../data/fetchCompany'
 import { motion } from 'framer-motion'
 
@@ -65,6 +69,7 @@ function CompanyRegistrationForm({ setShowCompanyRegistration, setShowAdminRegis
                 </motion.div>
             )}
 
+<<<<<<< HEAD
             <Form onSubmit={handleSubmit}>
                 <div className='d-flex align-items-start justify-content-center'>
                     <div className='me-2'><h3 className="text-primary">Registrazione Azienda</h3>
@@ -72,6 +77,11 @@ function CompanyRegistrationForm({ setShowCompanyRegistration, setShowAdminRegis
                             <Form.Label>Nome Azienda</Form.Label>
                             <Form.Control type="text" placeholder="Nome azienda" onChange={handleChange} />
                         </Form.Group>
+=======
+    return (<div>{!showUserRegistration ? 
+        (<Form onSubmit={handleSubmit}>
+            <h2>Register a new company</h2>
+>>>>>>> parent of d5f6c4f (sab22)
 
                         <Form.Group controlId="vatNumber" className="mb-3">
                             <Form.Label>Partita IVA</Form.Label>
@@ -88,6 +98,7 @@ function CompanyRegistrationForm({ setShowCompanyRegistration, setShowAdminRegis
                             <Form.Control type="text" placeholder="IBAN" onChange={handleChange} />
                         </Form.Group></div>
 
+<<<<<<< HEAD
                     <div><h6>Indirizzo Aziendale</h6>
                         <Form.Group controlId="address.street" className="mb-3">
                             <Form.Label>Indirizzo</Form.Label>
@@ -98,6 +109,58 @@ function CompanyRegistrationForm({ setShowCompanyRegistration, setShowAdminRegis
                             <Form.Label>Città</Form.Label>
                             <Form.Control type="text" placeholder="Città" onChange={handleChange} />
                         </Form.Group>
+=======
+            <Form.Group controlId="email" className="mb-3">
+                <Form.Label>Company's email</Form.Label>
+                <Form.Control
+                    type="email"
+                    placeholder="gestionaleaziendale"
+                    onChange={handleChange}
+                />
+            </Form.Group>
+
+            <h6>Company Address</h6>
+            <Form.Group controlId="address.street" className="mb-3">
+                <Form.Label>Address/Street</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="gestionaleaziendale"
+                    onChange={handleChange}
+                />
+            </Form.Group>
+            <Form.Group controlId="address.city" className="mb-3">
+                <Form.Label>City</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="gestionaleaziendale"
+                    onChange={handleChange}
+                />
+            </Form.Group>
+            <Form.Group controlId="address.postalCode" className="mb-3">
+                <Form.Label>CAP</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="gestionaleaziendale"
+                    onChange={handleChange}
+                />
+            </Form.Group>
+            <Form.Group controlId="address.province" className="mb-3">
+                <Form.Label>Where - Provincia</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="gestionaleaziendale"
+                    onChange={handleChange}
+                />
+            </Form.Group>
+            <Form.Group controlId="address.country" className="mb-3">
+                <Form.Label>From</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="gestionaleaziendale"
+                    onChange={handleChange}
+                />
+            </Form.Group>
+>>>>>>> parent of d5f6c4f (sab22)
 
                         <Form.Group controlId="address.postalCode" className="mb-3">
                             <Form.Label>CAP</Form.Label>
