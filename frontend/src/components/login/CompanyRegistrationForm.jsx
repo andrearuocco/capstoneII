@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Button, Form, Alert } from 'react-bootstrap'
+=======
+import { Button, Form } from 'react-bootstrap'
+>>>>>>> parent of d5f6c4f (sab22)
 =======
 import { Button, Form } from 'react-bootstrap'
 >>>>>>> parent of d5f6c4f (sab22)
@@ -81,6 +85,9 @@ function CompanyRegistrationForm({ setShowCompanyRegistration, setShowAdminRegis
     return (<div>{!showUserRegistration ? 
         (<Form onSubmit={handleSubmit}>
             <h2>Register a new company</h2>
+<<<<<<< HEAD
+>>>>>>> parent of d5f6c4f (sab22)
+=======
 >>>>>>> parent of d5f6c4f (sab22)
 
                         <Form.Group controlId="vatNumber" className="mb-3">
@@ -160,6 +167,9 @@ function CompanyRegistrationForm({ setShowCompanyRegistration, setShowAdminRegis
                     onChange={handleChange}
                 />
             </Form.Group>
+<<<<<<< HEAD
+>>>>>>> parent of d5f6c4f (sab22)
+=======
 >>>>>>> parent of d5f6c4f (sab22)
 
                         <Form.Group controlId="address.postalCode" className="mb-3">

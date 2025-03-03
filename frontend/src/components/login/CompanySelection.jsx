@@ -3,6 +3,7 @@ import { Button, Form, Alert } from 'react-bootstrap'
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import './CompanySelection.css'
 import Select from 'react-select'
 
@@ -50,6 +51,9 @@ function CompanySelection ({ companies, onSelectCompany, onRegisterCompany, show
 =======
 function CompanySelection ({ companies, onSelectCompany, onRegisterCompany, showCompanyRegistration }) {
 >>>>>>> parent of 9e5ea69 (companyregistration)
+=======
+function CompanySelection ({ companies, onSelectCompany, onRegisterCompany }) {
+>>>>>>> parent of d5f6c4f (sab22)
     const [selectedCompanyId, setSelectedCompanyId] = useState(null)
     const [alertMessage, setAlertMessage] = useState(null)
 
@@ -76,6 +80,7 @@ function CompanySelection ({ companies, onSelectCompany, onRegisterCompany, show
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             {!showCompanyRegistration ? (
                 <>
                     <Button className="me-3 button-blue-po" onClick={handleSelection}>Login</Button>
@@ -98,6 +103,10 @@ function CompanySelection ({ companies, onSelectCompany, onRegisterCompany, show
 >>>>>>> parent of 9e5ea69 (companyregistration)
 =======
 >>>>>>> parent of 9e5ea69 (companyregistration)
+=======
+            <Button className="me-3" onClick={handleSelection}>Login</Button>
+            <Button variant="secondary" onClick={onRegisterCompany}>Registra Azienda</Button>
+>>>>>>> parent of d5f6c4f (sab22)
         </div>
     )
 }
