@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Button, Form, Alert } from 'react-bootstrap'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import './CompanySelection.css'
 import Select from 'react-select'
 
@@ -46,6 +47,9 @@ function CompanySelection ({ companies, onSelectCompany, onRegisterCompany }) {
 =======
 function CompanySelection ({ companies, onSelectCompany, onRegisterCompany, showCompanyRegistration }) {
 >>>>>>> parent of 9e5ea69 (companyregistration)
+=======
+function CompanySelection ({ companies, onSelectCompany, onRegisterCompany, showCompanyRegistration }) {
+>>>>>>> parent of 9e5ea69 (companyregistration)
     const [selectedCompanyId, setSelectedCompanyId] = useState(null)
     const [alertMessage, setAlertMessage] = useState(null)
 
@@ -71,6 +75,7 @@ function CompanySelection ({ companies, onSelectCompany, onRegisterCompany, show
             </Form.Group>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             {!showCompanyRegistration ? (
                 <>
                     <Button className="me-3 button-blue-po" onClick={handleSelection}>Login</Button>
@@ -82,11 +87,16 @@ function CompanySelection ({ companies, onSelectCompany, onRegisterCompany, show
             <Button variant="secondary" onClick={onRegisterCompany}>Registra Azienda</Button>
 >>>>>>> parent of d5f6c4f (sab22)
 =======
+=======
+>>>>>>> parent of 9e5ea69 (companyregistration)
             {!showCompanyRegistration ? (<>
                 <Button className="me-3" onClick={handleSelection}>Login</Button>
 
                 <Button variant="secondary" onClick={onRegisterCompany}>Registra Azienda</Button>
             </>) : null}
+<<<<<<< HEAD
+>>>>>>> parent of 9e5ea69 (companyregistration)
+=======
 >>>>>>> parent of 9e5ea69 (companyregistration)
         </div>
     )
