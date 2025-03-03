@@ -9,7 +9,7 @@ Content-Type: application/json
   "phone": "123456789",
   "isAdmin": false,
   "position": "Elettricista",
-  "companyId": "67b5ad494b148cc3c08435c5",
+  "companyId": "678bc4eb6279e6af82fced28",
   "password": "password123"
 }
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Form, Alert } from 'react-bootstrap'
 <<<<<<< HEAD
+<<<<<<< HEAD
 import './CompanySelection.css'
 import Select from 'react-select'
 
@@ -42,37 +43,33 @@ function CompanySelection({ companies, onSelectCompany, onRegisterCompany, showC
 =======
 function CompanySelection ({ companies, onSelectCompany, onRegisterCompany }) {
 >>>>>>> parent of d5f6c4f (sab22)
+=======
+function CompanySelection ({ companies, onSelectCompany, onRegisterCompany, showCompanyRegistration }) {
+>>>>>>> parent of 9e5ea69 (companyregistration)
     const [selectedCompanyId, setSelectedCompanyId] = useState(null)
     const [alertMessage, setAlertMessage] = useState(null)
-    const [alertVariant, setAlertVariant] = useState('danger')
-
-    const options = companies.map(company => ({
-        value: company._id,
-        label: `🏢 ${company.companyName} ${company.address.street} ${company.address.city}`
-    }))
 
     const handleSelection = () => {
         if (!selectedCompanyId) {
-            setAlertVariant('danger')
-            setAlertMessage("⚠️ Seleziona la tua azienda.")
-            setTimeout(() => setAlertMessage(null), 3000) 
-            return
+            setAlertMessage("Seleziona la tua azienda per accedere.")
+            return;
         }
         onSelectCompany(selectedCompanyId)
     }
 
     return (
         <div>
-            {alertMessage && <Alert variant={alertVariant}>{alertMessage}</Alert>}
+            {alertMessage && <Alert variant='warning'>{alertMessage}</Alert>}
             <Form.Group controlId="companySelection" className="mb-3">
-                <Form.Label className="fw-bold text-primary">Seleziona la tua Azienda</Form.Label>
-                <Select
-                    options={options}
-                    styles={customStyles}
-                    placeholder="gestionaleaziendale's companies"
-                    onChange={(selectedOption) => setSelectedCompanyId(selectedOption.value)}
-                />
+                <Form.Label>Seleziona la tua Azienda</Form.Label>
+                <Form.Select onChange={(e) => setSelectedCompanyId(e.target.value)}>
+                    <option value="">-- Seleziona la tua Azienda --</option>
+                    {companies.map(company => (
+                        <option key={company._id} value={company._id}>{company.companyName}</option>
+                    ))}
+                </Form.Select>
             </Form.Group>
+<<<<<<< HEAD
 <<<<<<< HEAD
             {!showCompanyRegistration ? (
                 <>
@@ -84,6 +81,13 @@ function CompanySelection ({ companies, onSelectCompany, onRegisterCompany }) {
             <Button className="me-3" onClick={handleSelection}>Login</Button>
             <Button variant="secondary" onClick={onRegisterCompany}>Registra Azienda</Button>
 >>>>>>> parent of d5f6c4f (sab22)
+=======
+            {!showCompanyRegistration ? (<>
+                <Button className="me-3" onClick={handleSelection}>Login</Button>
+
+                <Button variant="secondary" onClick={onRegisterCompany}>Registra Azienda</Button>
+            </>) : null}
+>>>>>>> parent of 9e5ea69 (companyregistration)
         </div>
     )
 }
