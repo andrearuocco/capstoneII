@@ -26,7 +26,7 @@ export const createCompany = async (newCompany) => {
     }
 }
 
-export const companyId = async (id) => {
+export const companyWho = async (id) => {
     try {
         const res = await fetch(`${fetchCompanyUrl}/${id}`, {
             method: 'GET',
