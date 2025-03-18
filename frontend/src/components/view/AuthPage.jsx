@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
 import { fetchGetCompanies, createCompany } from '../../data/fetchCompany'
 import { login } from '../../data/fetchAuth'
-import { registerProfile } from '../../data/fetchProfile'
 import DynamicAlert from '../login/DynamicAlert'
 import RegisterCompanyForm from '../login/RegisterCompanyForm'
 import RegisterAdminForm from '../login/RegisterAdminForm'
 import UploadCompanyLogo from '../login/UploadCompanyLogo'
 import CompanySelection from '../login/CompanySelection'
+import { registerProfile } from '../../data/fetchProfile'
 
 function AuthPage() {
     const [selectedCompany, setSelectedCompany] = useState(null)
@@ -25,9 +25,25 @@ function AuthPage() {
         fetchGetCompanies().then(data => setCompanies(data || []))
     }, [])
 
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        if (!selectedCompany) {
+            setAlertMessage("⚠️ Select your company to log in.")
+            return;
+        }
+        const response = await login({ ...formData, companyId: selectedCompany })
+
+        if (response?.token) {
+            setAlertMessage("✅ Login succesful, laoding dashboard..")
+            setTimeout(() => navigate('/dashboard'), 1000)
+        } else {
+            setAlertMessage("❌ Wrong credentials, try again.")
+        }
+    }
+
     const handleCompanySelect = async (companyId) => {
         if (!companyId) {
-            setAlertMessage("Select your company to log in.")
+            setAlertMessage("⚠️ Select your company to log in.")
             return;
         }
         setSelectedCompany(companyId)
@@ -43,41 +59,30 @@ function AuthPage() {
         }
     }
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        if (!selectedCompany) {
-            setAlertMessage("Select your company to log in.")
-            return;
-        }
-        const response = await login({ ...formData, companyId: selectedCompany })
-
-        if (response?.token) {
-            setAlertMessage("Login successfully, load dashboard..")
-            setTimeout(() => navigate('/dashboard'), 1000)
-        } else {
-            setAlertMessage("Wrong credentials, try again.")
-        }
-    }
-
     const handleRegisterCompany = async (companyData) => {
         const response = await createCompany(companyData)
         if (response?.data) {
-            setAlertMessage("New company created!")
+            setAlertMessage("✅ New company created.")
+            setSelectedCompany(response.data._id)
+            setShowRegisterCompany(false)
             setShowRegisterAdmin(true)
             setShowLoginForm(false)
         } else {
-            setAlertMessage("Check company's data and try again.")
+            setAlertMessage("❌ Check company's data and try again.")
         }
     }
 
     const handleRegisterAdmin = async (adminData) => {
-        const response = await registerProfile({ ...adminData, company: selectedCompany })
-        if (response?.success) {
-            setAlertMessage("You are first admin, load dashboard..")
-            setTimeout(() => setShowUploadLogo(true), 1000)
+
+        const response = await registerProfile(adminData)
+        console.log(response)
+        if (response?.data) {
+            setAlertMessage("✅ You are first admin, soon be in your dashboard.")
+            setShowUploadLogo(true)
         } else {
-            setAlertMessage("Check your data and try again.")
+            setAlertMessage("⚠️ Check your data and try again.")
         }
+
     }
 
     return (
@@ -99,15 +104,31 @@ function AuthPage() {
                 )}
 
                 {showRegisterCompany && <RegisterCompanyForm onSubmit={handleRegisterCompany} />}
-                {showRegisterAdmin && <RegisterAdminForm onSubmit={handleRegisterAdmin} />}
+                {showRegisterAdmin && (
+                    <RegisterAdminForm
+                        companyId={selectedCompany}
+                        onSubmit={handleRegisterAdmin}
+                    />
+                )}
             </Col>
 
-            <UploadCompanyLogo show={showUploadLogo} onHide={() => setShowUploadLogo(false)} companyId={selectedCompany} />
+            {showUploadLogo && selectedCompany && (
+                <UploadCompanyLogo
+                    show={showUploadLogo}
+                    onHide={() => {
+                        setShowUploadLogo(false)
+                        setTimeout(() => navigate('/dashboard'), 1000) // Naviga sempre alla dashboard
+                    }}
+                    companyId={selectedCompany}
+                />
+            )}
+
         </Row>
     )
 }
 
 export default AuthPage
+
 
 
 

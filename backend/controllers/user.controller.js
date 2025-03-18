@@ -34,7 +34,7 @@ export const createUser = async (req, res) => {
         }
         await company.save()
 
-        res.status(201).send({
+        return res.status(201).send({
             message: isAdmin
                 ? 'Welcome, you are a new admin'
                 : 'Welcome, you are a new employee',
@@ -42,7 +42,7 @@ export const createUser = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).send({ message: 'Error, there is not a new user', error })
+        return res.status(500).send({ message: 'Error, there is not a new user', error })
     }
 }
 

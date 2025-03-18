@@ -68,6 +68,6 @@ const userSchema = new Schema({
         date: { type: Date, default: Date.now }, //registra momento della creazione della notifica
     }],
     createdAt: { type: Date, default: Date.now },
-});
+}, { collection: 'users' });
 
 export default model('User', userSchema)

@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import { Modal, Form, Button } from 'react-bootstrap'
 import { patchCompanyLogo } from '../../data/fetchCompany'
+import { useNavigate } from 'react-router-dom'
 
 function UploadCompanyLogo({ show, onHide, companyId }) {
     const [logo, setLogo] = useState(null)
+    const navigate = useNavigate()
 
     const handleUpload = async () => {
-        const message = logo ? 'Logo uploaded!' : 'There isn\'t a new logo for your company.';
+        const message = logo ? '✅ New logo uploaded' : '⚠️ There is not a new logo for your company';
         if (logo) await patchCompanyLogo(companyId, logo)
         alert(message)
         onHide()
-    }
+        setTimeout(() => navigate('/dashboard'), 1000) 
+    }    
 
     return (
         <Modal show={show} onHide={onHide}>

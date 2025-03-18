@@ -10,7 +10,7 @@ function DynamicAlert({ message, onClose }) {
             if (onClose) onClose();
         }, 3000)
         return () => clearTimeout(timer);
-    }, [])
+    }, [message])
 
     return show ? (
         <Alert variant="info" dismissible onClose={() => setShow(false)}>

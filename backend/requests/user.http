@@ -20,11 +20,11 @@ Content-Type: application/json
 {
   "firstName": "Orazio",
   "lastName": "Rossi",
-  "email": "orazio.rossi@example.com",
+  "email": "orazio.ros@example.com",
   "phone": "123456789",
   "isAdmin": true,
   "adminRole": "Direttore",
-  "companyId": "678a94301b84e9ebffc7cf30",
+  "companyId": "67d9b9e46a5285fd96373026",
   "password": "password123"
 }
 
