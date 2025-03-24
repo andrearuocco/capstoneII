@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
 import { fetchGetCompanies, createCompany } from '../../data/fetchCompany'
-import { login } from '../../data/fetchAuth'
+import { login } from '../../data/App'
 import DynamicAlert from '../login/DynamicAlert'
 import RegisterCompanyForm from '../login/RegisterCompanyForm'
 import RegisterAdminForm from '../login/RegisterAdminForm'
 import UploadCompanyLogo from '../login/UploadCompanyLogo'
 import CompanySelection from '../login/CompanySelection'
-import { registerProfile } from '../../data/fetchProfile'
+import { registerProfile } from '../../data/fetchProfile_refactored'
+import { companyWho } from '../../data/fetchCompany_refactored'
 
 function AuthPage() {
     const [selectedCompany, setSelectedCompany] = useState(null)
@@ -44,12 +45,21 @@ function AuthPage() {
     const handleCompanySelect = async (companyId) => {
         if (!companyId) {
             setAlertMessage("⚠️ Select your company to log in.")
-            return;
+            return
         }
+    
         setSelectedCompany(companyId)
         setShowRegisterCompany(false)
-
-        const company = companies.find(c => c._id === companyId)
+    
+        const response = await companyWho(companyId)
+    
+        if (response?.error) {
+            setAlertMessage(`❌ ${response.error}`)
+            return
+        }
+    
+        const company = response.data || response // a seconda di come risponde il backend
+    
         if (company?.admins?.length === 0) {
             setShowRegisterAdmin(true)
             setShowLoginForm(false)
@@ -61,7 +71,7 @@ function AuthPage() {
 
     const handleRegisterCompany = async (companyData) => {
         const response = await createCompany(companyData)
-        if (response?.data) {
+        if (response.status === 201 && response.status === 200) {
             setAlertMessage("✅ New company created.")
             setSelectedCompany(response.data._id)
             setShowRegisterCompany(false)
@@ -75,8 +85,7 @@ function AuthPage() {
     const handleRegisterAdmin = async (adminData) => {
 
         const response = await registerProfile(adminData)
-        console.log(response)
-        if (response?.data) {
+        if (response.status === 201 && response.status === 200) {
             setAlertMessage("✅ You are first admin, soon be in your dashboard.")
             setShowUploadLogo(true)
         } else {

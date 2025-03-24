@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
 import { Button } from 'react-bootstrap'
-import { fetchGetCompanies } from '../../data/fetchCompany'
+import { fetchGetCompanies } from '../../data/fetchCompany_refactored'
 
 function CompanySelection({ onSelectCompany, onRegisterCompany }) {
     const [companies, setCompanies] = useState([])
@@ -10,7 +10,8 @@ function CompanySelection({ onSelectCompany, onRegisterCompany }) {
     const loadCompanies = async () => {
         try {
             const data = await fetchGetCompanies()
-            const companyOptions = data.dati.map(c => ({
+            
+            const companyOptions = data.data.dati.map(c => ({
                 value: c._id,
                 label: c.companyName
             }))

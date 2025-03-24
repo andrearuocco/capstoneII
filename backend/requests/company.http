@@ -3,7 +3,7 @@ POST http://localhost:5000/companies
 Content-Type: application/json
 
 {
-    "companyName": "SEP S.R.L.",
+    "companyName": "SEP SR.L.",
     "vatNumber": "01052190491",
     "address": {
         "street": "Viale Carducci 180",
@@ -12,7 +12,7 @@ Content-Type: application/json
         "province": "Livorno",
         "country": "Italy"
     },
-    "email": "sepedilizia@virgilio.it",
+    "email": "sepedilizi@gmail.com",
     "IBAN": "IT35Y0300203280455343217862"
 }
 
