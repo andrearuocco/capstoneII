@@ -62,6 +62,7 @@ const userSchema = new Schema({
     TIN: {
         type: String,
     },
+    IBAN: { type: String, required: true, unique: true },
     notifications: [{ 
         message: String, //notifiche necessarie per la gestione dei permessi pagati, non pagati e delle ferie
         read: { type: Boolean, default: false }, //indica se la notifica è stata letta oppure no

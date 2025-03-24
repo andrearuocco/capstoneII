@@ -40,14 +40,14 @@ function CompanySelection({ onSelectCompany, onRegisterCompany }) {
                 isClearable
                 isSearchable
             />
-            <div className="mt-3">
-                <Button variant="primary" className="me-2" onClick={() => onSelectCompany(selectedOption ? selectedOption.value : null)}>
+            {/*<div className="mt-3">*/}
+                {/* <Button variant="primary" className="me-2" onClick={() => onSelectCompany(selectedOption ? selectedOption.value : null)}>
                     Login
-                </Button>
+                </Button> */}
                 <Button variant="secondary" onClick={onRegisterCompany}>
                     Register Company
                 </Button>
-            </div>
+            {/* </div> */}
         </div>
     )
 }

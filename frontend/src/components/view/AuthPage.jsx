@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
 import { createCompany } from '../../data/fetchCompany_refactored'
@@ -10,6 +10,7 @@ import UploadCompanyLogo from '../login/UploadCompanyLogo'
 import CompanySelection from '../login/CompanySelection'
 import { registerProfile } from '../../data/fetchProfile_refactored'
 import { companyWho } from '../../data/fetchCompany_refactored'
+import { ProfileContext } from '../context/ProfileContextProvider'
 
 function AuthPage() {
     const [selectedCompany, setSelectedCompany] = useState(null)
@@ -20,21 +21,18 @@ function AuthPage() {
     const [formData, setFormData] = useState({ email: '', password: '' })
     const [alertMessage, setAlertMessage] = useState(null)
     const navigate = useNavigate()
+    const { token, setToken, userInfo, setUserInfo } = useContext(ProfileContext)
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        /* 
-        if (!selectedCompany) {
-            setAlertMessage("⚠️ Select your company to log in.")
-            return;
-        } 
-        */
        
         const response = await login({ ...formData, company: selectedCompany })
-        console.log(response)
+    
+        if (response.status === 200 && response.data && response.data.token) {
+           
+            localStorage.setItem('token', response.data.token) // salviamo il token nel localStorage
+            setToken(response.data.token) // aggiorniamo il token nello stato del contesto
 
-        if (response.status === 200) {
-            // devo salvare il token nel localStorage (ma come si fa ?)
             setAlertMessage("✅ Login succesful, laoding dashboard..")
             setTimeout(() => navigate('/dashboard'), 3000)
         } else {
@@ -43,10 +41,6 @@ function AuthPage() {
     }
 
     const handleCompanySelect = async (companyId) => {
-        if (!companyId) {
-            setAlertMessage("⚠️ Select your company to log in.")
-            return
-        }
     
         setSelectedCompany(companyId)
         setShowRegisterCompany(false)
@@ -54,11 +48,11 @@ function AuthPage() {
         const response = await companyWho(companyId)
     
         if (response?.error) {
-            setAlertMessage(`❌ ${response.error}`)
-            return
+            setAlertMessage(`⚠️ Select your company to log in.`)
+            return;
         }
     
-        const company = response.data || response // a seconda di come risponde il backend
+        const company = response.data || response 
     
         if (company?.admins?.length === 0) {
             setShowRegisterAdmin(true)
@@ -67,6 +61,7 @@ function AuthPage() {
             setShowRegisterAdmin(false)
             setShowLoginForm(true)
         }
+
     }
 
     const handleRegisterCompany = async (companyData) => {
@@ -87,7 +82,11 @@ function AuthPage() {
 
         const response = await registerProfile(adminData)
         if (response.status === 201) {
-            await login({ ...adminData, company: adminData.companyId })
+            const loginR = await login({ ...adminData, company: adminData.companyId })
+            if (loginR.data && loginR.data.token) {
+                localStorage.setItem('token', loginR.data.token) // salviamo il token nel localStorage
+                setToken(loginR.data.token) // aggiorniamo il token nello stato del contesto
+            }
             setAlertMessage("✅ You are first admin, soon be in your dashboard.")
             setShowUploadLogo(true)
         } else {

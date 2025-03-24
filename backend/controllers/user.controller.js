@@ -46,7 +46,8 @@ export const createUser = async (req, res) => {
     }
 }
 
-/* export const getUsers = async (req, res) => {
+/* 
+export const getUsers = async (req, res) => {
     const { companyId } = req.user
 
     try {
@@ -56,7 +57,8 @@ export const createUser = async (req, res) => {
         console.error(error)
         res.status(500).send({ message: 'Here, there are not users.', error })
     }
-} */
+} 
+*/
 
 export const updateUser = async (req, res) => {
     const { id } = req.params

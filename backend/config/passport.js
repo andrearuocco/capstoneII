@@ -1,4 +1,5 @@
-/* import GoogleStrategy from 'passport-google-oauth20';
+/* 
+import GoogleStrategy from 'passport-google-oauth20';
 import Author from '../models/authorSchema.js' 
 import jwt from 'jsonwebtoken'
 
@@ -48,4 +49,5 @@ const googleStrategy = new GoogleStrategy({
     }
 )
 
-export default googleStrategy */
+export default googleStrategy 
+*/
