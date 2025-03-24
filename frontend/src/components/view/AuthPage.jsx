@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
-import { fetchGetCompanies, createCompany } from '../../data/fetchCompany'
+import { createCompany } from '../../data/fetchCompany_refactored'
 import { login } from '../../data/App'
 import DynamicAlert from '../login/DynamicAlert'
 import RegisterCompanyForm from '../login/RegisterCompanyForm'
@@ -13,7 +13,6 @@ import { companyWho } from '../../data/fetchCompany_refactored'
 
 function AuthPage() {
     const [selectedCompany, setSelectedCompany] = useState(null)
-    const [companies, setCompanies] = useState([])
     const [showRegisterCompany, setShowRegisterCompany] = useState(false)
     const [showRegisterAdmin, setShowRegisterAdmin] = useState(false)
     const [showUploadLogo, setShowUploadLogo] = useState(false)
@@ -22,21 +21,22 @@ function AuthPage() {
     const [alertMessage, setAlertMessage] = useState(null)
     const navigate = useNavigate()
 
-    useEffect(() => {
-        fetchGetCompanies().then(data => setCompanies(data || []))
-    }, [])
-
     const handleLogin = async (e) => {
         e.preventDefault();
+        /* 
         if (!selectedCompany) {
             setAlertMessage("⚠️ Select your company to log in.")
             return;
-        }
-        const response = await login({ ...formData, companyId: selectedCompany })
+        } 
+        */
+       
+        const response = await login({ ...formData, company: selectedCompany })
+        console.log(response)
 
-        if (response?.token) {
+        if (response.status === 200) {
+            // devo salvare il token nel localStorage (ma come si fa ?)
             setAlertMessage("✅ Login succesful, laoding dashboard..")
-            setTimeout(() => navigate('/dashboard'), 1000)
+            setTimeout(() => navigate('/dashboard'), 3000)
         } else {
             setAlertMessage("❌ Wrong credentials, try again.")
         }
@@ -71,7 +71,8 @@ function AuthPage() {
 
     const handleRegisterCompany = async (companyData) => {
         const response = await createCompany(companyData)
-        if (response.status === 201 && response.status === 200) {
+        console.log(response)
+        if (response.status === 200) {
             setAlertMessage("✅ New company created.")
             setSelectedCompany(response.data._id)
             setShowRegisterCompany(false)
@@ -85,7 +86,8 @@ function AuthPage() {
     const handleRegisterAdmin = async (adminData) => {
 
         const response = await registerProfile(adminData)
-        if (response.status === 201 && response.status === 200) {
+        if (response.status === 201) {
+            await login({ ...adminData, company: adminData.companyId })
             setAlertMessage("✅ You are first admin, soon be in your dashboard.")
             setShowUploadLogo(true)
         } else {

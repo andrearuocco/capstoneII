@@ -8,7 +8,7 @@ export const fetchGetCompanies = async () => {
         if (res.status === 200) {
             return { status: res.status, data }
         } else {
-            return { status: res.status, error: 'Error loading companies' }
+            return { status: res.status, error: 'Error loading companies.' }
         }
     } catch (err) {
         return { status: 500, error: 'Server down, try again.' }
@@ -25,10 +25,10 @@ export const createCompany = async (newCompany) => {
             body: JSON.stringify(newCompany)
         })
         const data = await res.json()
-        if (res.status === 201) {
-            return { status: res.status, data }
+        if (res.status === 200) {
+            return { status: res.status, data: data }
         } else {
-            return { status: res.status, error: data.message || 'Creation failed' }
+            return { status: res.status, error: data.message || 'Creation failed.' }
         }
     } catch (error) {
         return { status: 500, error: 'Server down, try again.' }

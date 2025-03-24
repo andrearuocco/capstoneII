@@ -12,7 +12,7 @@ export const login = async (formValue) => {
         })
         const data = await res.json()
         if (res.status === 200) {
-            return { status: res.status, data }
+            return { status: res.status, data:data }
         } else {
             return { status: res.status, error: data.message || 'Error to login' }
         }
