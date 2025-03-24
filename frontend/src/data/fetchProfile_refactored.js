@@ -14,7 +14,7 @@ export const registerProfile = async (formData) => {
         if (res.status === 201 || res.status === 200) {
             return { status: res.status, data }
         } else {
-            return { status: res.status, error: data.message || 'Registration failed' }
+            return { status: res.status, error: data.message || 'Registration failed.' }
         }
     } catch (error) {
         return { status: 500, error: 'Server down, try again.' }
