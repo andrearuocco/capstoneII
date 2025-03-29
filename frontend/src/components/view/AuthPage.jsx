@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import { Form, Button, Image, Container } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
 import { createCompany } from '../../data/fetchCompany_refactored'
@@ -11,6 +12,9 @@ import CompanySelection from '../login/CompanySelection'
 import { registerProfile } from '../../data/fetchProfile_refactored'
 import { companyWho } from '../../data/fetchCompany_refactored'
 import { ProfileContext } from '../context/ProfileContextProvider'
+import './AuthPage.css'
+import { toast } from 'react-toastify'
+import { AnimatePresence, motion } from 'framer-motion'
 
 function AuthPage() {
     const [selectedCompany, setSelectedCompany] = useState(null)
@@ -33,10 +37,10 @@ function AuthPage() {
             localStorage.setItem('token', response.data.token) // salviamo il token nel localStorage
             setToken(response.data.token) // aggiorniamo il token nello stato del contesto
 
-            setAlertMessage("✅ Login succesful, laoding dashboard..")
+            toast.success("✅ Login succesful, laoding dashboard..")
             setTimeout(() => navigate('/dashboard'), 3000)
         } else {
-            setAlertMessage("❌ Wrong credentials, try again.")
+            toast.error("❌ Wrong credentials, try again.")
         }
     }
 
@@ -48,7 +52,7 @@ function AuthPage() {
         const response = await companyWho(companyId)
     
         if (response?.error) {
-            setAlertMessage(`⚠️ Select your company to log in.`)
+            toast.error(`⚠️ Select your company to log in.`)
             return;
         }
     
@@ -68,13 +72,13 @@ function AuthPage() {
         const response = await createCompany(companyData)
         console.log(response)
         if (response.status === 200) {
-            setAlertMessage("✅ New company created.")
+            toast.success("✅ New company created.")
             setSelectedCompany(response.data._id)
             setShowRegisterCompany(false)
             setShowRegisterAdmin(true)
             setShowLoginForm(false)
         } else {
-            setAlertMessage("❌ Check company's data and try again.")
+            toast.error("❌ Check company's data and try again.")
         }
     }
 
@@ -87,39 +91,82 @@ function AuthPage() {
                 localStorage.setItem('token', loginR.data.token) // salviamo il token nel localStorage
                 setToken(loginR.data.token) // aggiorniamo il token nello stato del contesto
             }
-            setAlertMessage("✅ You are first admin, soon be in your dashboard.")
+            toast.success("✅ You are first admin, soon be in your dashboard.")
             setShowUploadLogo(true)
         } else {
-            setAlertMessage("⚠️ Check your data and try again.")
+            toast.error("⚠️ Check your data and try again.")
         }
 
     }
 
     return (
-        <Row className="justify-content-center mt-5">
-            <Col md={5}>
+    <Container fluid className='min-vh-100 justify-content-center align-items-center d-flex auth-container-wrapper'>
+        <Row className='w-100 align-items-center'>
+            <Image src="/lavoriedili.png" alt="LogoSepSRL" className="col-12 col-md-5" />
+            <Col xs={12} md={7} className='auth-container justify-content-center'>
                 {alertMessage && <DynamicAlert message={alertMessage} onClose={() => setAlertMessage(null)} />}
 
                 {!showRegisterCompany && !showRegisterAdmin && (
                     <>
                         <CompanySelection onSelectCompany={handleCompanySelect} onRegisterCompany={() => setShowRegisterCompany(true)} />
                         {showLoginForm && (
-                            <form onSubmit={handleLogin}>
-                                <input type="email" placeholder="Email" required onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-                                <input type="password" placeholder="Password" required onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
-                                <button type="submit">Login</button>
-                            </form>
+                            <Form onSubmit={handleLogin}>
+
+                                <Form.Group className='mt-2'>
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control type="email" placeholder="Email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                                </Form.Group>
+
+                                <Form.Group className='mt-2'>
+                                    <Form.Label>Password</Form.Label>
+                                    <Form.Control type="password" placeholder="Password" required value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+                                </Form.Group>
+
+                                <Button type="submit" className='button-nvm-blue mt-2'>Login</Button>
+
+                            </Form>
                         )}
                     </>
                 )}
 
-                {showRegisterCompany && <RegisterCompanyForm onSubmit={handleRegisterCompany} />}
-                {showRegisterAdmin && (
-                    <RegisterAdminForm
-                        companyId={selectedCompany}
-                        onSubmit={handleRegisterAdmin}
-                    />
-                )}
+                {/* MODIFICHE 30 MARZO */}<AnimatePresence>{/* MODIFICHE 30 MARZO */}
+                    {showRegisterCompany &&
+
+                        <motion.div
+                            key="register-company"
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -50 }}
+                            transition={{ duration: 0.4 }}
+                        >
+
+                            <RegisterCompanyForm onSubmit={handleRegisterCompany} />
+
+                        </motion.div>
+
+                    }
+                {/* MODIFICHE 30 MARZO */}</AnimatePresence>{/* MODIFICHE 30 MARZO */}
+                
+                {/* MODIFICHE 30 MARZO */}<AnimatePresence>{/* MODIFICHE 30 MARZO */}
+                    {showRegisterAdmin && (
+
+                        <motion.div
+                            key="register-company"
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -50 }}
+                            transition={{ duration: 0.4 }}
+                        >
+
+                            <RegisterAdminForm
+                                companyId={selectedCompany}
+                                onSubmit={handleRegisterAdmin}
+                            />
+
+                        </motion.div>
+
+                    )}
+                    {/* MODIFICHE 30 MARZO */}</AnimatePresence>{/* MODIFICHE 30 MARZO */}
             </Col>
 
             {showUploadLogo && selectedCompany && (
@@ -127,13 +174,14 @@ function AuthPage() {
                     show={showUploadLogo}
                     onHide={() => {
                         setShowUploadLogo(false)
-                        setTimeout(() => navigate('/dashboard'), 1000) // Naviga sempre alla dashboard
+                        setTimeout(() => navigate('/dashboard'), 1000) 
                     }}
                     companyId={selectedCompany}
                 />
             )}
 
         </Row>
+    </Container>
     )
 }
 

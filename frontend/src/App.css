@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
 .App {
   text-align: center;
 }
@@ -139,3 +141,28 @@ input:focus {
   font-family: fangsong;
   font-weight: 600;
 }
+
+/* MODIFICHE 29 MARZO */
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: #f2f4f8;
+}
+
+.app-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .app-wrapper {
+        padding: 1rem;
+    }
+}
+/* MODIFICHE 29 MARZO */

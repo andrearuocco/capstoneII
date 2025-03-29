@@ -21,7 +21,7 @@ function RegisterCompanyForm({ onSubmit }) {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Form.Group>
+            <div className='d-flex justify-content-center align-items-start'><div><Form.Group>
                 <Form.Label>Company Name</Form.Label>
                 <Form.Control type="text" required onChange={(e) => setFormData({ ...formData, companyName: e.target.value })} />
             </Form.Group>
@@ -39,10 +39,9 @@ function RegisterCompanyForm({ onSubmit }) {
             <Form.Group>
                 <Form.Label>IBAN</Form.Label>
                 <Form.Control type="text" required onChange={(e) => setFormData({ ...formData, IBAN: e.target.value })} />
-            </Form.Group>
+            </Form.Group></div>
 
-            {/* Address Fields */}
-            <Form.Group>
+            <div className='ms-2'><Form.Group>
                 <Form.Label>Street</Form.Label>
                 <Form.Control type="text" onChange={(e) => setFormData({ ...formData, street: e.target.value })} />
             </Form.Group>
@@ -65,7 +64,7 @@ function RegisterCompanyForm({ onSubmit }) {
             <Form.Group>
                 <Form.Label>Country</Form.Label>
                 <Form.Control type="text" onChange={(e) => setFormData({ ...formData, country: e.target.value })} />
-            </Form.Group>
+            </Form.Group></div></div>
 
             <Button type="submit" variant="success" className="mt-3">Register Company</Button>
         </Form>

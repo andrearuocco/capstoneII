@@ -1,0 +1,68 @@
+/* MODIFICHE 29 MARZO */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+/* MODIFICHE 29 MARZO */
+
+/* MODIFICHE 29 MARZO */
+body, .container, .row, .col {
+    font-family: 'Inter', sans-serif;
+}
+
+.auth-container {
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.6s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.form-control {
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-container-wrapper {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    animation: fadeIn 0.6s ease-in-out;
+}
+/* MODIFICHE 29 MARZO */
+
+.button-nvm-blue {
+    border: 0.2px solid #720404;
+    border-radius: 20px !important;
+    background-color: #a27bf2;
+    color: rgb(5, 4, 4); 
+    font-style: oblique;
+    font-family: fangsong;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.button-nvm-blue:hover {
+    border: 0.2px solid #41176d !important; 
+    background-color: #41176d !important; 
+    color: white; 
+}

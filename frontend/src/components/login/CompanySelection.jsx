@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
 import { Button } from 'react-bootstrap'
 import { fetchGetCompanies } from '../../data/fetchCompany_refactored'
+import './CompanySelection.css'
+import { toast } from 'react-toastify'
 
 function CompanySelection({ onSelectCompany, onRegisterCompany }) {
     const [companies, setCompanies] = useState([])
@@ -31,20 +33,21 @@ function CompanySelection({ onSelectCompany, onRegisterCompany }) {
     }
 
     return (
-        <div>
-            <Select
+        <div className='d-flex flex-column gap-2 company-select-wrapper justify-content-center align-items-center'>
+            <div className="w-100"><Select
                 value={selectedOption}
                 onChange={handleChange}
                 options={companies}
                 placeholder="Select your company"
                 isClearable
                 isSearchable
-            />
+                classNamePrefix="react-select"
+            /></div>
             {/*<div className="mt-3">*/}
                 {/* <Button variant="primary" className="me-2" onClick={() => onSelectCompany(selectedOption ? selectedOption.value : null)}>
                     Login
                 </Button> */}
-                <Button variant="secondary" onClick={onRegisterCompany}>
+                <Button className="button-nvm-po" onClick={onRegisterCompany}>
                     Register Company
                 </Button>
             {/* </div> */}

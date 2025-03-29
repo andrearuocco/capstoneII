@@ -1,0 +1,33 @@
+/* MODIFICHE 29 MARZO */
+.company-select-wrapper {
+    background: transparent;
+    padding: 2rem;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.react-select__control {
+    box-shadow: none !important;
+}
+
+.react-select__control--is-focused {
+    border-color: #74b9ff !important;
+    box-shadow: 0 0 0 3px rgba(116, 185, 255, 0.3);
+}
+/* MODIFICHE 29 MARZO */
+
+.button-nvm-po {
+    border: 0.2px solid #007bff;
+    border-radius: 20px !important;
+    background-color: #e1edf3;
+    color: rgb(5, 4, 4); 
+    font-style: oblique;
+    font-family: fangsong;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.button-nvm-po:hover {
+    border: 0.2px solid #7d8386 !important; 
+    background-color: #7d8386 !important; 
+    color: white; 
+}

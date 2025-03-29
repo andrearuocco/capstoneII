@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import { Modal, Form, Button } from 'react-bootstrap'
 import { patchCompanyLogo } from '../../data/fetchCompany_refactored'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 function UploadCompanyLogo({ show, onHide, companyId }) {
     const [logo, setLogo] = useState(null)
     const navigate = useNavigate()
 
     const handleUpload = async () => {
-        const message = logo ? '✅ New logo uploaded' : '⚠️ There is not a new logo for your company';
+        const message = logo ? toast.success('✅ New logo uploaded') : toast.error('⚠️ There is not a new logo for your company')
         if (logo) await patchCompanyLogo(companyId, logo)
-        alert(message)
         onHide()
         setTimeout(() => navigate('/dashboard'), 1000) 
     }    
