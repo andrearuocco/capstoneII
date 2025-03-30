@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import Company from '../models/companySchema.js'
 
 export const createUser = async (req, res) => {
-    const { firstName, lastName, email, phone, isAdmin, adminRole, position, companyId, password } = req.body
+    const { firstName, lastName, email, phone, isAdmin, adminRole, position, companyId, password, IBAN } = req.body
 
     try {
         
@@ -14,6 +14,7 @@ export const createUser = async (req, res) => {
             lastName,
             email,
             phone,
+            IBAN,
             isAdmin,
             adminRole: isAdmin ? adminRole : undefined,
             position: !isAdmin ? position : undefined,

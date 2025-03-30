@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import Select from 'react-select'
+import './RegisterAdminForm.css'
 
 function RegisterAdminForm({ companyId, onSubmit }) {
     const adminRoles = [
@@ -23,7 +24,7 @@ function RegisterAdminForm({ companyId, onSubmit }) {
         isAdmin: true,
         adminRole: '',
         companyId: companyId, 
-        IBAN: '', // MODIFICHE 30 MARZO
+        IBAN: '' // MODIFICHE 30 MARZO
     })
 
     /* useEffect(() => {
@@ -81,7 +82,7 @@ function RegisterAdminForm({ companyId, onSubmit }) {
                 />
             </Form.Group></div></div>
 
-            <Button type="submit" variant="success" className="mt-3">Register Admin</Button>
+            <Button type="submit" className="mt-3 button-nvm-blue">Register Admin</Button>
         </Form>
     );
 }

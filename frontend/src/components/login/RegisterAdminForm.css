@@ -1,0 +1,16 @@
+.button-nvm-blue {
+    border: 0.2px solid #720404;
+    border-radius: 20px !important;
+    background-color: #a27bf2;
+    color: rgb(5, 4, 4); 
+    font-style: oblique;
+    font-family: fangsong;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.button-nvm-blue:hover {
+    border: 0.2px solid #41176d !important; 
+    background-color: #41176d !important; 
+    color: white; 
+}

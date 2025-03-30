@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
+import './RegisterCompanyForm.css'
 
-function RegisterCompanyForm({ onSubmit }) {
+function RegisterCompanyForm({ onSubmit, CloseRegisterCompany }) {
     const [formData, setFormData] = useState({
         companyName: '',
         vatNumber: '',
@@ -66,7 +67,9 @@ function RegisterCompanyForm({ onSubmit }) {
                 <Form.Control type="text" onChange={(e) => setFormData({ ...formData, country: e.target.value })} />
             </Form.Group></div></div>
 
-            <Button type="submit" variant="success" className="mt-3">Register Company</Button>
+            <div className='d-flex align-items-center'><Button type="submit" className="button-nvm-blue mt-3 me-2">Register Company</Button>
+
+            <Button onClick={CloseRegisterCompany} className="mt-3 button-nvm-po">Go Back</Button></div>
         </Form>
     )
 }

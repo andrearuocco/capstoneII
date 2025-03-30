@@ -82,6 +82,9 @@ function AuthPage() {
         }
     }
 
+    const CloseRegisterCompany = () => { 
+        setShowRegisterCompany(false) }
+
     const handleRegisterAdmin = async (adminData) => {
 
         const response = await registerProfile(adminData)
@@ -140,7 +143,7 @@ function AuthPage() {
                             transition={{ duration: 0.4 }}
                         >
 
-                            <RegisterCompanyForm onSubmit={handleRegisterCompany} />
+                            <RegisterCompanyForm onSubmit={handleRegisterCompany} CloseRegisterCompany={CloseRegisterCompany} />
 
                         </motion.div>
 
