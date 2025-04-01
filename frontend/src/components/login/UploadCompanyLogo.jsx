@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Modal, Form, Button } from 'react-bootstrap'
-import { patchCompanyLogo } from '../../data/fetchCompany_refactored'
+import { patchCompanyLogo } from '../../data/fetchCompany'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 

@@ -2,15 +2,15 @@ import React, { useState, useContext } from 'react'
 import { Form, Button, Image, Container } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
-import { createCompany } from '../../data/fetchCompany_refactored'
-import { login } from '../../data/App'
-import DynamicAlert from '../login/DynamicAlert'
+import { createCompany } from '../../data/fetchCompany'
+import { login } from '../../data/fetchAuth'
+/* import DynamicAlert from '../login/DynamicAlert' */
 import RegisterCompanyForm from '../login/RegisterCompanyForm'
 import RegisterAdminForm from '../login/RegisterAdminForm'
 import UploadCompanyLogo from '../login/UploadCompanyLogo'
 import CompanySelection from '../login/CompanySelection'
-import { registerProfile } from '../../data/fetchProfile_refactored'
-import { companyWho } from '../../data/fetchCompany_refactored'
+import { registerProfile } from '../../data/fetchProfile'
+import { companyWho } from '../../data/fetchCompany'
 import { ProfileContext } from '../context/ProfileContextProvider'
 import './AuthPage.css'
 import { toast } from 'react-toastify'
@@ -23,7 +23,7 @@ function AuthPage() {
     const [showUploadLogo, setShowUploadLogo] = useState(false)
     const [showLoginForm, setShowLoginForm] = useState(false)
     const [formData, setFormData] = useState({ email: '', password: '' })
-    const [alertMessage, setAlertMessage] = useState(null)
+    /* const [alertMessage, setAlertMessage] = useState(null) */
     const navigate = useNavigate()
     const { token, setToken, userInfo, setUserInfo } = useContext(ProfileContext)
 
@@ -107,7 +107,7 @@ function AuthPage() {
         <Row className='w-100 align-items-center'>
             <Image src="/lavoriedili.png" alt="LogoSepSRL" className="col-12 col-md-5" />
             <Col xs={12} md={7} className='auth-container justify-content-center'>
-                {alertMessage && <DynamicAlert message={alertMessage} onClose={() => setAlertMessage(null)} />}
+                {/* {alertMessage && <DynamicAlert message={alertMessage} onClose={() => setAlertMessage(null)} />} */}
 
                 {!showRegisterCompany && !showRegisterAdmin && (
                     <>

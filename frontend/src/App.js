@@ -17,7 +17,7 @@ function App() {
           </Routes>
         </Router>
         {/* MODIFICHE 30 MARZO */}
-        <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+        <ToastContainer position="top-right" autoClose={5000} hideProgressBar />
         {/* MODIFICHE 30 MARZO */}
       </div>
     </ProfileContextProvider >

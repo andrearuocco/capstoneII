@@ -1,5 +1,5 @@
 import { useState, createContext, useEffect } from "react"
-import { me } from "../../data/App"
+import { me } from "../../data/fetchAuth"
 
 export const ProfileContext = createContext()
 

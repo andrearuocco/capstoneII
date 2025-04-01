@@ -1,12 +1,17 @@
+
 const fetchCompanyUrl = `${process.env.REACT_APP_API_URL}/companies`
 
 export const fetchGetCompanies = async () => {
     try {
         const res = await fetch(fetchCompanyUrl)
         const data = await res.json()
-        return data
+        if (res.status === 200) {
+            return { status: res.status, data }
+        } else {
+            return { status: res.status, error: 'Error loading companies.' }
+        }
     } catch (err) {
-        console.log("There are not companies, here.", err)
+        return { status: 500, error: 'Server down, try again.' }
     }
 }
 
@@ -20,9 +25,13 @@ export const createCompany = async (newCompany) => {
             body: JSON.stringify(newCompany)
         })
         const data = await res.json()
-        return { data }
+        if (res.status === 200) {
+            return { status: res.status, data: data }
+        } else {
+            return { status: res.status, error: data.message || 'Creation failed.' }
+        }
     } catch (error) {
-        return { error: 'Server down, try again.' }
+        return { status: 500, error: 'Server down, try again.' }
     }
 }
 
@@ -31,30 +40,30 @@ export const companyWho = async (id) => {
         const res = await fetch(`${fetchCompanyUrl}/${id}`, {
             method: 'GET',
         })
-        if (res.ok) {
-            const data = await res.json()
-            return data
+        const data = await res.json()
+        if (res.status === 200) {
+            return { status: res.status, data }
         } else {
-            const errorData = await res.json()
-            return { error: errorData.message || 'Not Found' }
+            return { status: res.status, error: data.message || 'Not Found' }
         }
     } catch (error) {
-        return { error: 'Server down, try again.' }
+        return { status: 500, error: 'Server down, try again.' }
     }
 }
 
 export const patchCompanyLogo = async (id, logo) => {
     try {
-
-        const response = await fetch(`${fetchCompanyUrl}/${id}/logo`, {
+        const res = await fetch(`${fetchCompanyUrl}/${id}/logo`, {
             method: 'PATCH',
             body: logo,
         })
-        if (!response.ok) {
-            throw new Error('This company got a new logo.')
+        const data = await res.json()
+        if (res.status === 200) {
+            return { status: res.status, data }
+        } else {
+            return { status: res.status, error: data.message || 'Upload failed' }
         }
-        
     } catch (error) {
-        console.error('Server down, try again.', error)
+        return { status: 500, error: 'Server down, try again.' }
     }
 }
