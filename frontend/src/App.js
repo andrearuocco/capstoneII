@@ -12,12 +12,12 @@ function App() {
       <div className="app-wrapper">
         <Router>
           <Routes>
-            <Route path="/" element={<AuthPage />} />
+            <Route path="/" element={<AuthPage/>} />
             <Route path="/dashboard" element={<div>Dashboard</div>} />
           </Routes>
         </Router>
         {/* MODIFICHE 30 MARZO */}
-        <ToastContainer position="top-right" autoClose={5000} hideProgressBar />
+        <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar />
         {/* MODIFICHE 30 MARZO */}
       </div>
     </ProfileContextProvider >

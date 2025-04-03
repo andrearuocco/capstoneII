@@ -3,6 +3,7 @@ import Select from 'react-select'
 import { Button } from 'react-bootstrap'
 import { fetchGetCompanies } from '../../data/fetchCompany'
 import './CompanySelection.css'
+import reactSelectStyles from '../context/ReactSelectStyles'
 
 function CompanySelection({ onSelectCompany, onRegisterCompany }) {
     const [companies, setCompanies] = useState([])
@@ -41,7 +42,8 @@ function CompanySelection({ onSelectCompany, onRegisterCompany }) {
                     placeholder="Select your company"
                     isClearable
                     isSearchable
-                    classNamePrefix="react-select"
+                    /* classNamePrefix="react-select" */
+                    styles={reactSelectStyles}
                 />
             </div>
             {/*<div className="mt-3">*/}

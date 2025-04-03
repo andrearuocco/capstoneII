@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import Select from 'react-select'
 import './RegisterAdminForm.css'
+import reactSelectStyles from '../context/ReactSelectStyles'
 
 function RegisterAdminForm({ companyId, onSubmit }) {
     const adminRoles = [
@@ -27,16 +28,9 @@ function RegisterAdminForm({ companyId, onSubmit }) {
         IBAN: '' // MODIFICHE 30 MARZO
     })
 
-    /* useEffect(() => {
-        console.log("✅ Received companyId in RegisterAdminForm:", companyId)
-        if (companyId) {
-            setAdminData((prev) => ({ ...prev, company: companyId }))
-        }
-    }, [companyId]) */
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(adminData)
+        onSubmit(adminData) //02 APR.:onSubmit(adminData)
     }
     
     return (
@@ -88,6 +82,7 @@ function RegisterAdminForm({ companyId, onSubmit }) {
                             options={adminRoles}
                             placeholder="Select Admin Role"
                             isClearable
+                            styles={reactSelectStyles}
                         />
                     </Form.Group>
                 </div>

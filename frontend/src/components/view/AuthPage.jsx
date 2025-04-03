@@ -23,7 +23,9 @@ function AuthPage() {
     const [showUploadLogo, setShowUploadLogo] = useState(false)
     const [showLoginForm, setShowLoginForm] = useState(false)
     const [formData, setFormData] = useState({ email: '', password: '' })
-    /* const [alertMessage, setAlertMessage] = useState(null) */
+    const smoothNavigate = (path, delay = 1000) => {
+        setTimeout(() => navigate(path), delay)
+    }
     const navigate = useNavigate()
     const { token, setToken, userInfo, setUserInfo } = useContext(ProfileContext)
 
@@ -37,8 +39,8 @@ function AuthPage() {
             localStorage.setItem('token', response.data.token) // salviamo il token nel localStorage
             setToken(response.data.token) // aggiorniamo il token nello stato del contesto
 
-            toast.success("✅ Login succesful, laoding dashboard..")
-            setTimeout(() => navigate('/dashboard'), 3000)
+            toast.success("✅ Login succesful, loading dashboard..")
+            smoothNavigate('/dashboard', 2000)
         } else {
             toast.error("❌ Wrong credentials, try again.")
         }
@@ -103,88 +105,83 @@ function AuthPage() {
     }
 
     return (
-    <Container fluid className='min-vh-100 justify-content-center align-items-center d-flex auth-container-wrapper'>
-        <Row className='w-100 align-items-center'>
-            <Image src="/lavoriedili.png" alt="LogoSepSRL" className="col-12 col-md-5" />
-            <Col xs={12} md={7} className='auth-container justify-content-center'>
-                {/* {alertMessage && <DynamicAlert message={alertMessage} onClose={() => setAlertMessage(null)} />} */}
+        <Container fluid className='min-vh-100 justify-content-center align-items-center d-flex auth-container-wrapper'>
+            <Row className='w-100 align-items-center'>
+                <Image src="/lavoriedili.png" alt="LogoSepSRL" className="col-12 col-md-5 flag-wave" />
+                <Col xs={12} md={7} className='auth-container justify-content-center'>
+                    {/* {alertMessage && <DynamicAlert message={alertMessage} onClose={() => setAlertMessage(null)} />} */}
 
-                {!showRegisterCompany && !showRegisterAdmin && (
-                    <>
-                        <CompanySelection onSelectCompany={handleCompanySelect} onRegisterCompany={() => setShowRegisterCompany(true)} />
-                        {showLoginForm && (
-                            <Form onSubmit={handleLogin}>
+                    {!showRegisterCompany && !showRegisterAdmin && (
+                        <>{/* <AnimatePresence><motion.div> */}
+                            <CompanySelection onSelectCompany={handleCompanySelect} onRegisterCompany={() => setShowRegisterCompany(true)} />
+                            {showLoginForm && (
+                                <Form onSubmit={handleLogin}>
 
-                                <Form.Group className='mt-2'>
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" placeholder="Email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-                                </Form.Group>
+                                    <Form.Group className='mt-2'>
+                                        <Form.Label>Email</Form.Label>
+                                        <Form.Control type="email" placeholder="Email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                                    </Form.Group>
 
-                                <Form.Group className='mt-2'>
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Password" required value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
-                                </Form.Group>
+                                    <Form.Group className='mt-2'>
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control type="password" placeholder="Password" required value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+                                    </Form.Group>
 
-                                <Button type="submit" className='button-nvm-blue mt-2'>Login</Button>
+                                    <Button type="submit" className='button-nvm-blue mt-2'>Login</Button>
 
-                            </Form>
+                                </Form>
+                            )}
+                            {/* </motion.div></AnimatePresence> */}</>
+                    )}
+
+                    {/* MODIFICHE 30 MARZO */}<AnimatePresence mode="wait">
+
+                        {showRegisterCompany && !showRegisterAdmin && (
+                            <motion.div
+                                key="form-company"
+                                initial={{ opacity: 0, x: 60 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -60 }}
+                                transition={{ duration: 0.4, ease: [0.25, 0.8, 0.25, 1] }}
+                            >{/* MODIFICHE 30 MARZO */}
+
+                                <RegisterCompanyForm onSubmit={handleRegisterCompany} CloseRegisterCompany={CloseRegisterCompany} />
+
+                            {/* MODIFICHE 30 MARZO */}</motion.div>
                         )}
-                    </>
+                        {showRegisterAdmin && (
+                            <motion.div
+                                key="form-admin"
+                                initial={{ opacity: 0, x: 60 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -60 }}
+                                transition={{ duration: 0.4, ease: [0.25, 0.8, 0.25, 1] }}
+                            >{/* MODIFICHE 30 MARZO */}
+
+                                <RegisterAdminForm
+                                    companyId={selectedCompany}
+                                    onSubmit={handleRegisterAdmin}
+                                />
+
+                            {/* MODIFICHE 30 MARZO */}</motion.div>
+                        )}
+
+                        </AnimatePresence>{/* MODIFICHE 30 MARZO */}
+                </Col>
+
+                {showUploadLogo && selectedCompany && (
+                    <UploadCompanyLogo
+                        show={showUploadLogo}
+                        onHide={() => {
+                            setShowUploadLogo(false)
+                            setTimeout(() => navigate('/dashboard'), 1000)
+                        }}
+                        companyId={selectedCompany}
+                    />
                 )}
 
-                {/* MODIFICHE 30 MARZO */}<AnimatePresence>{/* MODIFICHE 30 MARZO */}
-                    {showRegisterCompany &&
-
-                        <motion.div
-                            key="register-company"
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -50 }}
-                            transition={{ duration: 0.4 }}
-                        >
-
-                            <RegisterCompanyForm onSubmit={handleRegisterCompany} CloseRegisterCompany={CloseRegisterCompany} />
-
-                        </motion.div>
-
-                    }
-                {/* MODIFICHE 30 MARZO */}</AnimatePresence>{/* MODIFICHE 30 MARZO */}
-                
-                {/* MODIFICHE 30 MARZO */}<AnimatePresence>{/* MODIFICHE 30 MARZO */}
-                    {showRegisterAdmin && (
-
-                        <motion.div
-                            key="register-company"
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -50 }}
-                            transition={{ duration: 0.4 }}
-                        >
-
-                            <RegisterAdminForm
-                                companyId={selectedCompany}
-                                onSubmit={handleRegisterAdmin}
-                            />
-
-                        </motion.div>
-
-                    )}
-                    {/* MODIFICHE 30 MARZO */}</AnimatePresence>{/* MODIFICHE 30 MARZO */}
-            </Col>
-
-            {showUploadLogo && selectedCompany && (
-                <UploadCompanyLogo
-                    show={showUploadLogo}
-                    onHide={() => {
-                        setShowUploadLogo(false)
-                        setTimeout(() => navigate('/dashboard'), 1000) 
-                    }}
-                    companyId={selectedCompany}
-                />
-            )}
-
-        </Row>
-    </Container>
+            </Row>
+        </Container>
     )
 }
 
