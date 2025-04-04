@@ -4,8 +4,9 @@ import { Button } from 'react-bootstrap'
 import { fetchGetCompanies } from '../../data/fetchCompany'
 import './CompanySelection.css'
 import reactSelectStyles from '../context/ReactSelectStyles'
+import { motion } from 'framer-motion'
 
-function CompanySelection({ onSelectCompany, onRegisterCompany }) {
+function CompanySelection({ onSelectCompany, onRegisterCompany, showLoginForm }) {
     const [companies, setCompanies] = useState([])
     const [selectedOption, setSelectedOption] = useState(null)
 
@@ -32,9 +33,19 @@ function CompanySelection({ onSelectCompany, onRegisterCompany }) {
         onSelectCompany(selected ? selected.value : null)
     }
 
-    return (
-        <div className='d-flex flex-column gap-2 company-select-wrapper justify-content-center align-items-center'>
-            <div className="w-100">
+    return /* MODIFICHE 04.04 */(<>
+        <h3 className="title-welcome">Welcome EasyToHandle</h3>
+        <p className="subtitle-welcome">Handle your company with us</p>{/* MODIFICHE 04.04 */}
+        <motion.div 
+            className='d-flex flex-column gap-2 company-select-wrapper justify-content-center align-items-center'
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+            <div className="w-100 d-flex flex-column">
+                {!showLoginForm && 
+                    <img src="/business-login.svg" alt="Welcome Illustration" style={{ width: '20vh', maxWidth: '300px' }} className="mb-3 align-self-center" />
+                }                
                 <Select
                     value={selectedOption}
                     onChange={handleChange}
@@ -42,20 +53,16 @@ function CompanySelection({ onSelectCompany, onRegisterCompany }) {
                     placeholder="Select your company"
                     isClearable
                     isSearchable
-                    /* classNamePrefix="react-select" */
                     styles={reactSelectStyles}
                 />
             </div>
-            {/*<div className="mt-3">*/}
-                {/* <Button variant="primary" className="me-2" onClick={() => onSelectCompany(selectedOption ? selectedOption.value : null)}>
-                    Login
-                </Button> */}
+            
             <Button className="button-nvm-po" onClick={onRegisterCompany}>
                 Register Company
             </Button>
-            {/* </div> */}
-        </div>
-    )
+            
+        </motion.div>{/* MODIFICHE 04.04 */}
+    </>)/* MODIFICHE 04.04 */
 }
 
 export default CompanySelection

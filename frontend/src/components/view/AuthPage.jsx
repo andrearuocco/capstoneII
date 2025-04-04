@@ -19,7 +19,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 function AuthPage() {
     const [selectedCompany, setSelectedCompany] = useState(null)
     const [showRegisterCompany, setShowRegisterCompany] = useState(false)
-    const [showRegisterAdmin, setShowRegisterAdmin] = useState(false)
+    const [showRegisterAdmin, setShowRegisterAdmin] = useState(null)
     const [showUploadLogo, setShowUploadLogo] = useState(false)
     const [showLoginForm, setShowLoginForm] = useState(false)
     const [formData, setFormData] = useState({ email: '', password: '' })
@@ -39,10 +39,10 @@ function AuthPage() {
             localStorage.setItem('token', response.data.token) // salviamo il token nel localStorage
             setToken(response.data.token) // aggiorniamo il token nello stato del contesto
 
-            toast.success("✅ Login succesful, loading dashboard..")
+            toast.success("Login succesful, loading dashboard..")
             smoothNavigate('/dashboard', 2000)
         } else {
-            toast.error("❌ Wrong credentials, try again.")
+            toast.error("Wrong credentials, try again.")
         }
     }
 
@@ -54,14 +54,14 @@ function AuthPage() {
         const response = await companyWho(companyId)
     
         if (response?.error) {
-            toast.error(`⚠️ Select your company to log in.`)
+            toast.error(`Select your company to log in.`)
             return;
         }
     
         const company = response.data || response 
     
         if (company?.admins?.length === 0) {
-            setShowRegisterAdmin(true)
+            setShowRegisterAdmin("direct") // handleRegisterAdmin OR handleRegisterAdminToDashboard (04.04)
             setShowLoginForm(false)
         } else {
             setShowRegisterAdmin(false)
@@ -74,13 +74,13 @@ function AuthPage() {
         const response = await createCompany(companyData)
         console.log(response)
         if (response.status === 200) {
-            toast.success("✅ New company created.")
+            toast.success("New company created.")
             setSelectedCompany(response.data._id)
             setShowRegisterCompany(false)
             setShowRegisterAdmin(true)
             setShowLoginForm(false)
         } else {
-            toast.error("❌ Check company's data and try again.")
+            toast.error("Check company's data and try again.")
         }
     }
 
@@ -96,13 +96,30 @@ function AuthPage() {
                 localStorage.setItem('token', loginR.data.token) // salviamo il token nel localStorage
                 setToken(loginR.data.token) // aggiorniamo il token nello stato del contesto
             }
-            toast.success("✅ You are first admin, soon be in your dashboard.")
+            toast.success("You are first admin, soon be in your dashboard.")
             setShowUploadLogo(true)
         } else {
-            toast.error("⚠️ Check your data and try again.")
+            toast.error("Check your data and try again.")
         }
 
     }
+
+    /* MODIFICHE 04.04 */
+    const handleRegisterAdminToDashboard = async (adminData) => {
+        const response = await registerProfile(adminData)
+        if (response.status === 201) {
+            const loginR = await login({ ...adminData, company: adminData.companyId })
+            if (loginR.data && loginR.data.token) {
+                localStorage.setItem('token', loginR.data.token)
+                setToken(loginR.data.token)
+            }
+            toast.success("You are first admin, soon be in your dashboard.")
+            smoothNavigate('/dashboard', 2000)
+        } else {
+            toast.error("Check your data and try again.")
+        }
+    }
+    /* MODIFICHE 04.04 */
 
     return (
         <Container fluid className='min-vh-100 justify-content-center align-items-center d-flex auth-container-wrapper'>
@@ -113,7 +130,7 @@ function AuthPage() {
 
                     {!showRegisterCompany && !showRegisterAdmin && (
                         <>{/* <AnimatePresence><motion.div> */}
-                            <CompanySelection onSelectCompany={handleCompanySelect} onRegisterCompany={() => setShowRegisterCompany(true)} />
+                            <CompanySelection showLoginForm={showLoginForm} onSelectCompany={handleCompanySelect} onRegisterCompany={() => setShowRegisterCompany(true)} />
                             {showLoginForm && (
                                 <Form onSubmit={handleLogin}>
 
@@ -160,7 +177,7 @@ function AuthPage() {
 
                                 <RegisterAdminForm
                                     companyId={selectedCompany}
-                                    onSubmit={handleRegisterAdmin}
+                                    onSubmit={showRegisterAdmin === "direct" ? handleRegisterAdminToDashboard : handleRegisterAdmin} // 04.04
                                 />
 
                             {/* MODIFICHE 30 MARZO */}</motion.div>

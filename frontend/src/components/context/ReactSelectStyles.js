@@ -4,7 +4,7 @@ const reactSelectStyles = {
         borderRadius: '20px',
         borderColor: state.isFocused ? '#74b9ff' : '#ced4da',
         boxShadow: state.isFocused ? '0 0 0 0.3px rgba(116, 185, 255, 0.3)' : 'none',
-        fontFamily: 'fangsong',
+        fontFamily: 'Inter, sans-serif',
         fontSize: '1rem',
         fontStyle: 'oblique',
         fontWeight: '600',

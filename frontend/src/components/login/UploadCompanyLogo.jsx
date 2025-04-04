@@ -10,7 +10,7 @@ function UploadCompanyLogo({ show, onHide, companyId }) {
     const navigate = useNavigate()
 
     const handleUpload = async () => {
-        const message = logo ? toast.success('✅ New logo uploaded') : toast.error('⚠️ There is not a new logo for your company')
+        const message = logo ? toast.success('New logo uploaded.') : toast.error('There is not a new logo for your company.')
         
         const formData = new FormData()
         formData.append('logo', logo)
@@ -21,7 +21,7 @@ function UploadCompanyLogo({ show, onHide, companyId }) {
     }    
 
     const handleClose = () => {
-        toast.error('⚠️ There is not a new logo for your company')
+        toast.error('There is not a new logo for your company.')
         onHide()
         setTimeout(() => navigate('/dashboard'), 1000)
     }
