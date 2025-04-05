@@ -5,21 +5,22 @@ import ProfileContextProvider from './components/context/ProfileContextProvider'
 import AuthPage from './components/view/AuthPage'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import PannelloControllo from './components/dashboard/PannelloControllo'
 
 function App() {
   return (
     <ProfileContextProvider>
-      <div className="app-wrapper">
+      {/* div a riga 16 che racchiude AuthPage_05APRSERA */}
         <Router>
           <Routes>
-            <Route path="/" element={<AuthPage/>} />
-            <Route path="/dashboard" element={<div>Dashboard</div>} />
+           <Route path="/" element={<div className="app-wrapper"><AuthPage/></div>} /> {/* _05APRS. */}
+            <Route path="/dashboard" element={<PannelloControllo/>} />
           </Routes>
         </Router>
         {/* MODIFICHE 30 MARZO */}
         <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar />
         {/* MODIFICHE 30 MARZO */}
-      </div>
+      {/* div a riga 16 che racchiude AuthPage_05APRSERA */}
     </ProfileContextProvider >
   )
 }
