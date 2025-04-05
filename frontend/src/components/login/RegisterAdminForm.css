@@ -14,3 +14,20 @@
     background-color: #41176d !important; 
     color: white; 
 }
+
+/* PROVE 5 APRILE */
+@media (max-width: 575px), (min-width: 766px) and (max-width: 930px) {
+    form > .d-flex {
+        flex-direction: column !important;
+    }
+
+    form > .d-flex > div {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    .app-wrapper {
+        height: auto !important;
+    }
+}
+/* PROVE 5 APRILE */

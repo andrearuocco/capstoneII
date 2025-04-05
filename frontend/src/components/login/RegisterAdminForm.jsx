@@ -3,6 +3,7 @@ import { Form, Button } from 'react-bootstrap'
 import Select from 'react-select'
 import './RegisterAdminForm.css'
 import reactSelectStyles from '../context/ReactSelectStyles'
+import { toast } from 'react-toastify'
 
 function RegisterAdminForm({ companyId, onSubmit }) {
     const adminRoles = [
@@ -16,6 +17,7 @@ function RegisterAdminForm({ companyId, onSubmit }) {
         { value: "Responsabile", label: "Responsabile" }
     ]
     
+    const [confirmPassword, setConfirmPassword] = useState('') // PROVE 5 APRILE
     const [adminData, setAdminData] = useState({
         firstName: '',
         lastName: '',
@@ -27,10 +29,16 @@ function RegisterAdminForm({ companyId, onSubmit }) {
         companyId: companyId, 
         IBAN: '' // MODIFICHE 30 MARZO
     })
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(adminData) //02 APR.:onSubmit(adminData)
+
+        if (adminData.password !== confirmPassword) {
+            toast.error("Check your data and try again.")
+            return;
+        }
+
+        onSubmit(adminData) // 02 APR.:onSubmit(adminData)
     }
     
     return (
@@ -39,22 +47,22 @@ function RegisterAdminForm({ companyId, onSubmit }) {
                 <div>
                     <Form.Group>
                         <Form.Label>First Name</Form.Label>
-                        <Form.Control style={{ textTransform: 'uppercase' }} type="text" required value={adminData.firstName} onChange={(e) => setAdminData({ ...adminData, firstName: e.target.value.toUpperCase() })} />
+                        <Form.Control placeholder="EasyToUse" style={{ textTransform: 'uppercase' }} type="text" required value={adminData.firstName} onChange={(e) => setAdminData({ ...adminData, firstName: e.target.value.toUpperCase() })} />
                     </Form.Group>
 
                     <Form.Group>
                         <Form.Label>Last Name</Form.Label>
-                        <Form.Control style={{ textTransform: 'uppercase' }} type="text" required value={adminData.lastName} onChange={(e) => setAdminData({ ...adminData, lastName: e.target.value.toUpperCase() })} />
+                        <Form.Control placeholder="EasyToUse" style={{ textTransform: 'uppercase' }} type="text" required value={adminData.lastName} onChange={(e) => setAdminData({ ...adminData, lastName: e.target.value.toUpperCase() })} />
                     </Form.Group>
 
                     <Form.Group>
                         <Form.Label>Email</Form.Label>
-                        <Form.Control style={{ textTransform: 'uppercase' }} type="email" required value={adminData.email} onChange={(e) => setAdminData({ ...adminData, email: e.target.value.toLowerCase() })} />
+                        <Form.Control placeholder="EasyToUse" style={{ textTransform: 'uppercase' }} type="email" required value={adminData.email} onChange={(e) => setAdminData({ ...adminData, email: e.target.value.toLowerCase() })} />
                     </Form.Group>
 
                     <Form.Group>
                         <Form.Label>Phone</Form.Label>
-                        <Form.Control style={{ textTransform: 'uppercase' }} type="text" inputMode="numeric" required value={adminData.phone} onChange={(e) => setAdminData({ ...adminData, phone: e.target.value })} onKeyDown={(e) => {
+                        <Form.Control placeholder="EasyToUse" style={{ textTransform: 'uppercase' }} type="text" inputMode="numeric" required value={adminData.phone} onChange={(e) => setAdminData({ ...adminData, phone: e.target.value })} onKeyDown={(e) => {
                             const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab']
                             if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
                                 e.preventDefault();
@@ -66,12 +74,23 @@ function RegisterAdminForm({ companyId, onSubmit }) {
                 <div className='ms-2'>
                     <Form.Group>
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" required value={adminData.password} onChange={(e) => setAdminData({ ...adminData, password: e.target.value })} />
+                        <Form.Control type="password" placeholder="EasyToUse" required value={adminData.password} onChange={(e) => setAdminData({ ...adminData, password: e.target.value })} />
                     </Form.Group>
+
+                    {/* PROVE 5 APRILE */}<Form.Group>
+                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            placeholder="EasyToUse"
+                            required
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                    </Form.Group>{/* PROVE 5 APRILE */}
 
                     <Form.Group>
                         <Form.Label>IBAN</Form.Label>
-                        <Form.Control style={{ textTransform: 'uppercase' }} type="IBAN" required value={adminData.IBAN} onChange={(e) => setAdminData({ ...adminData, IBAN: e.target.value.toUpperCase() })} />
+                        <Form.Control placeholder="EasyToUse" style={{ textTransform: 'uppercase' }} type="IBAN" required value={adminData.IBAN} onChange={(e) => setAdminData({ ...adminData, IBAN: e.target.value.toUpperCase() })} />
                     </Form.Group>
 
                     <Form.Group>

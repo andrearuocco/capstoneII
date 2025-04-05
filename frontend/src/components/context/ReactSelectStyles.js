@@ -18,6 +18,9 @@ const reactSelectStyles = {
         fontStyle: 'oblique',
         fontSize: '1rem',
         padding: '10px 15px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        gap: '0.5rem'
     }),
     menu: (provided) => ({
         ...provided,
@@ -29,6 +32,11 @@ const reactSelectStyles = {
         ...provided,
         color: '#aaa',
         fontStyle: 'italic',
+    }),
+    menuList: (provided) => ({
+        ...provided,
+        maxHeight: '120px', 
+        overflowY: 'auto'
     }),
 }
 

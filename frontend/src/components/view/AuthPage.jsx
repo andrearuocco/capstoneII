@@ -136,7 +136,7 @@ function AuthPage() {
 
                                     <Form.Group className='mt-2'>
                                         <Form.Label>Email</Form.Label>
-                                        <Form.Control type="email" placeholder="Email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                                        <Form.Control type="email" placeholder="Email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })} />
                                     </Form.Group>
 
                                     <Form.Group className='mt-2'>

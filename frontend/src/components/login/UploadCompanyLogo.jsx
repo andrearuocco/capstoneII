@@ -33,7 +33,7 @@ function UploadCompanyLogo({ show, onHide, companyId }) {
             </Modal.Header>
             <Modal.Body className="modal-body-custom">
                 <Form.Group>
-                    <Form.Label>Company Logo</Form.Label>
+                    {/* <Form.Label>Company Logo</Form.Label> */}
                     <Form.Control type="file" onChange={(e) => setLogo(e.target.files[0])} />
                 </Form.Group>
                 <Button onClick={handleUpload} className="mt-3 button-nvm-blue">Upload</Button>

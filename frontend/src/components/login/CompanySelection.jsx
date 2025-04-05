@@ -14,9 +14,24 @@ function CompanySelection({ onSelectCompany, onRegisterCompany, showLoginForm })
         try {
             const data = await fetchGetCompanies()
             
+            /* PROVE 5 APRILE 
             const companyOptions = data.data.dati.map(c => ({
                 value: c._id,
                 label: c.companyName
+            })) 
+            PROVE 5 APRILE */
+            const companyOptions = data.data.dati.map(c => ({
+                value: c._id,
+                label: (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <img 
+                            src={c.logo ? c.logo : '/logowithout.jpg'} 
+                            alt="company logo" 
+                            style={{ width: '24px', height: '24px', objectFit: 'cover', borderRadius: '50%' }} 
+                        />
+                        {c.companyName}
+                    </div>
+                )
             }))
             setCompanies(companyOptions)
         } catch (error) {

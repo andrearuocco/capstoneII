@@ -41,12 +41,12 @@ function RegisterCompanyForm({ onSubmit, CloseRegisterCompany }) {
                             <div>
                                 <Form.Group>
                                     <Form.Label>Company Name</Form.Label>
-                                    <Form.Control style={{ textTransform: 'uppercase' }} type="text" required onChange={(e) => setFormData({ ...formData, companyName: e.target.value.toUpperCase() })} />
+                                    <Form.Control placeholder="Company Name" style={{ textTransform: 'uppercase' }} type="text" required onChange={(e) => setFormData({ ...formData, companyName: e.target.value.toUpperCase() })} />
                                 </Form.Group>
 
                                 <Form.Group>
                                     <Form.Label>VAT Number</Form.Label>
-                                    <Form.Control inputMode="numeric" type="text" required onChange={(e) => setFormData({ ...formData, vatNumber: e.target.value })} onKeyDown={(e) => {
+                                    <Form.Control placeholder="P.IVA" inputMode="numeric" type="text" required onChange={(e) => setFormData({ ...formData, vatNumber: e.target.value })} onKeyDown={(e) => {
                                         const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab']
                                         if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
                                             e.preventDefault();
@@ -56,29 +56,29 @@ function RegisterCompanyForm({ onSubmit, CloseRegisterCompany }) {
 
                                 <Form.Group>
                                     <Form.Label>Email</Form.Label>
-                                    <Form.Control style={{ textTransform: 'uppercase' }} type="email" required onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })} />
+                                    <Form.Control placeholder="Company's email" style={{ textTransform: 'uppercase' }} type="email" required onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })} />
                                 </Form.Group>
 
                                 <Form.Group>
                                     <Form.Label>IBAN</Form.Label>
-                                    <Form.Control style={{ textTransform: 'uppercase' }} type="text" required onChange={(e) => setFormData({ ...formData, IBAN: e.target.value.toUpperCase() })} />
+                                    <Form.Control placeholder="IBAN" style={{ textTransform: 'uppercase' }} type="text" required onChange={(e) => setFormData({ ...formData, IBAN: e.target.value.toUpperCase() })} />
                                 </Form.Group>
                             </div>
 
                             <div className='ms-2'>
                                 <Form.Group>
                                     <Form.Label>Street</Form.Label>
-                                    <Form.Control style={{ textTransform: 'uppercase' }} type="text" onChange={(e) => setFormData({ ...formData, street: e.target.value.toUpperCase() })} />
+                                    <Form.Control placeholder="Indirizzo" style={{ textTransform: 'uppercase' }} type="text" onChange={(e) => setFormData({ ...formData, street: e.target.value.toUpperCase() })} />
                                 </Form.Group>
 
                                 <Form.Group>
                                     <Form.Label>City</Form.Label>
-                                    <Form.Control style={{ textTransform: 'uppercase' }} type="text" onChange={(e) => setFormData({ ...formData, city: e.target.value.toUpperCase() })} />
+                                    <Form.Control placeholder="City" style={{ textTransform: 'uppercase' }} type="text" onChange={(e) => setFormData({ ...formData, city: e.target.value.toUpperCase() })} />
                                 </Form.Group>
 
                                 <Form.Group>
                                     <Form.Label>Postal Code</Form.Label>
-                                    <Form.Control type="text" inputMode="numeric" onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })} onKeyDown={(e) => {
+                                    <Form.Control placeholder="CAP" type="text" inputMode="numeric" onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })} onKeyDown={(e) => {
                                         const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab']
                                         if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
                                             e.preventDefault();
@@ -88,12 +88,12 @@ function RegisterCompanyForm({ onSubmit, CloseRegisterCompany }) {
 
                                 <Form.Group>
                                     <Form.Label>Province</Form.Label>
-                                    <Form.Control style={{ textTransform: 'uppercase' }} type="text" onChange={(e) => setFormData({ ...formData, province: e.target.value.toUpperCase() })} />
+                                    <Form.Control placeholder="Province" style={{ textTransform: 'uppercase' }} type="text" onChange={(e) => setFormData({ ...formData, province: e.target.value.toUpperCase() })} />
                                 </Form.Group>
 
                                 <Form.Group>
                                     <Form.Label>Country</Form.Label>
-                                    <Form.Control style={{ textTransform: 'uppercase' }} type="text" onChange={(e) => setFormData({ ...formData, country: e.target.value.toUpperCase() })} />
+                                    <Form.Control placeholder="Country" style={{ textTransform: 'uppercase' }} type="text" onChange={(e) => setFormData({ ...formData, country: e.target.value.toUpperCase() })} />
                                 </Form.Group>
                             </div>
                         </div>
