@@ -1,4 +1,3 @@
-
 const fetchProfileUrl = `${process.env.REACT_APP_API_URL}/user`
 
 export const registerProfile = async (formData) => {

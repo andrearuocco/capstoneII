@@ -26,23 +26,37 @@ function DashBSComp ({ user }) {
         <Row className='p-3 row-padd'>
             {cards.map((card, index) => (
                 <motion.div
-                    key={index}
-                    className="col-BS-6 bor-dash px-3 pb-4 d-flex flex-column align-items-center justify-content-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 * index, duration: 0.6 }}
-                    // onClick={() => }
+                    className="col-BS-6 bor-dash px-3 pb-4 d-flex flex-column align-items-center justify-content-center dash-card"
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 * index, duration: 0.6 }}
                 >
-                    <motion.img
-                        src={card.icon}
-                        alt={card.title}
-                        className="dashboard-icon"
+                    <motion.div
+                        className="dash-icon-wrapper"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4 * index, duration: 1 }}
-                    />
-                    <h3>{card.title}</h3>
-                </motion.div>
+                        transition={{
+                            delay: 0.3 * index + 0.6, 
+                            duration: 1.6,
+                            ease: "easeInOut"
+                        }}
+                    >
+                        <motion.img
+                            src={card.icon}
+                            alt={card.title}
+                            className="dashboard-icon"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{
+                                delay: 0.3 * index + 0.8, 
+                                duration: 1.6,
+                                ease: "easeInOut"
+                            }}
+                        />
+                    </motion.div>
+
+                    <h3 className="dash-card-title">{card.title}</h3>
+                </motion.div>            
             ))}
         </Row>
     </Container>)

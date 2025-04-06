@@ -1,6 +1,6 @@
 .dashboard-icon {
-    width: 60px;
-    height: 60px;
+    width: 180px;
+    height: 180px;
     margin-bottom: 1rem;
 }
 
@@ -17,6 +17,46 @@
 }
 
 .row-padd {
-    min-height: 90vh !important;
-    margin-top: 9vh;
+    height: 90vh !important;
+    margin-top: 9vh; /* TODO NAVBAR */ 
 }
+
+/* css_06APRILE */
+.dash-card {
+    background: linear-gradient(160deg, #e4e9f1 0%, #c4d7f2 100%);
+    border-radius: 20px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.dash-card:hover {
+    background: #ffffff;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+}
+
+.dash-icon-wrapper {
+    opacity: 0.75;
+    transition: opacity 1s ease-in-out;
+}
+
+.dash-card:hover .dash-icon-wrapper {
+    opacity: 1;
+}
+
+.dash-card-title {
+    font-family: 'Roboto Slab', serif;
+    font-size: 2.8rem;
+    font-weight: 800;
+    /* 
+    position: relative;
+    z-index: 2; 
+    */
+    text-align: center;
+    margin-top: 0.5rem;
+    opacity: 0.30;
+}
+/* css_06APRILE */

@@ -6,10 +6,10 @@ import './PannelloControllo.css'
 function PannelloControllo () {
     const { userInfo } = useContext(ProfileContext)
 
-    if (!userInfo?.data) return <div>Loading...</div>
+    if (!userInfo?.data) return <div className='d-flex justify-content-center align-items-center'>Loading..</div>
 
     return (
-        <DashBSComp user={userInfo.data} />
+        <div className='dashboard-container'><DashBSComp user={userInfo.data} /></div>
     )
 }
 

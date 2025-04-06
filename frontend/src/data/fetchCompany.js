@@ -1,4 +1,3 @@
-
 const fetchCompanyUrl = `${process.env.REACT_APP_API_URL}/companies`
 
 export const fetchGetCompanies = async () => {
